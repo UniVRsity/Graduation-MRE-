@@ -11,8 +11,8 @@ export default class HelloWorld {
     private baseUrl;
     private next;
     private previous;
-    private anwserOff;
-    private anwserOn;
+    private showAnwser;
+    private anwserBackground;
     private start;
     private light;
     private Q1;
@@ -41,7 +41,7 @@ export default class HelloWorld {
     private started;
     private beginQuiz;
     private updateQuestion;
-    private createKit;
+    private updateAnwserBackground;
     private updateAnim;
 }
 //# sourceMappingURL=app.d.ts.map

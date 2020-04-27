@@ -16,8 +16,8 @@ export default class HelloWorld {
 
 	private next: MRE.Actor = null;
 	private previous: MRE.Actor = null;
-	private anwserOff: MRE.Actor = null;
-	private anwserOn: MRE.Actor = null;
+	private showAnwser: MRE.Actor = null;
+	private anwserBackground: MRE.Actor = null;
 	private start: MRE.Actor = null;
 	private light: MRE.Actor = null;
 
@@ -38,6 +38,7 @@ export default class HelloWorld {
 	private Q6A: MRE.Actor = null;
 	private Q7A: MRE.Actor = null;
 	private Q8A: MRE.Actor = null;
+
 
 
 	questionNumber = 0;
@@ -111,11 +112,21 @@ export default class HelloWorld {
 				}
 			}
 		});
-		//create show Anwser icon
-		this.createKit(0, 'Next Button > Show Anwser', "artifact:1459576871615201699", -1.75);
-		this.createKit(1, 'Next Button > Anwser On', "artifact:1460257686426747542", -111.75);
+		this.showAnwser = MRE.Actor.CreateFromLibrary(this.context, {
+			resourceId: "artifact:1460403930600046846",
+			actor: {
+				name: 'Next Button > Show Anwser',
 
-
+				transform: {
+					local: {
+						position: { x: -1.75, y: 0.0, z: -0.1 },
+						rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians),
+						scale: { x: 0.08, y: 0.08, z: 0.08 }
+					}
+				}
+			}
+		});
+		this.updateAnwserBackground('Next Button > Anwser Off Back', "artifact:1460401277014901205");
 
 		//display first question animation by default 
 		this.Q1 = MRE.Actor.CreateFromLibrary(this.context, {
@@ -142,8 +153,7 @@ export default class HelloWorld {
 		//make next, previous, and Anwser icon into button 
 		const nextButtonBehavior = this.next.setBehavior(MRE.ButtonBehavior);
 		const previousButtonBehavior = this.previous.setBehavior(MRE.ButtonBehavior);
-		let anwserOffButtonBehavior = this.anwserOff.setBehavior(MRE.ButtonBehavior);
-		let anwserOnButtonBehavior = this.anwserOn.setBehavior(MRE.ButtonBehavior);
+		const showAnwserButtonBehavior = this.showAnwser.setBehavior(MRE.ButtonBehavior);
 
 		//if next is pressed add 1 to question number, destroy the current animation,
 		//and update it to the new animation. 
@@ -167,59 +177,37 @@ export default class HelloWorld {
 			}
 		});
 		//if anwserOff is pressed destroy it and enable anwserOn icon and update the animation 
-		anwserOffButtonBehavior.onClick(_ => {
-			this.isAnwser = true;
-			this.createKit(1, 'Next Button > Anwser On', "artifact:1460257686426747542", -1.75);
-			anwserOnButtonBehavior = this.anwserOn.setBehavior(MRE.ButtonBehavior);
-			this.anwserOff.destroy();
-			this.currentQuestion.destroy();
-			this.updateAnim();
-		});
-		//if anwserOn is pressed destroy it and enable anwserOff icon and update the animation 
-		anwserOnButtonBehavior.onClick(_ => {
-			this.isAnwser = false;
-			this.createKit(0, 'Next Button > Show Anwser', "artifact:1459576871615201699", -1.75);
-			this.anwserOn.destroy();
+		showAnwserButtonBehavior.onClick(_ => {
+			this.isAnwser = !this.isAnwser;
+			this.anwserBackground.destroy();
+			if (this.isAnwser) {
+				this.updateAnwserBackground('Next Button > Anwser On Back', "artifact:1460401277274948054");
+			}
+			else {
+				this.updateAnwserBackground('Next Button > Anwser Off Back', "artifact:1460401277014901205");
+			}
 			this.currentQuestion.destroy();
 			this.updateAnim();
 		});
 
 	}
 
-	private createKit(state: number, name: string, artifactID: string , xPos: number) {
-		if (state === 1) {
-			this.anwserOn = MRE.Actor.CreateFromLibrary(this.context, {
+	private updateAnwserBackground(name: string, artifactID: string) {
+			this.anwserBackground = MRE.Actor.CreateFromLibrary(this.context, {
 				resourceId: artifactID,
 				actor: {
 					name: name,
 
 					transform: {
 						local: {
-							position: { x: xPos, y: 0.0, z: -0.1 },
+							position: { x: -1.75, y: 0.0, z: -0.5 },
 							rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians),
 							scale: { x: 0.08, y: 0.08, z: 0.08 }
 						}
 					}
 				}
 			});
-		}
-		else {
-			this.anwserOff = MRE.Actor.CreateFromLibrary(this.context, {
-				resourceId: artifactID,
-				actor: {
-					name: name,
-
-					transform: {
-						local: {
-							position: { x: xPos, y: 0.0, z: -0.1 },
-							rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians),
-							scale: { x: 0.08, y: 0.08, z: 0.08 }
-						}
-					}
-				}
-			});
-		}
-		}
+	}
 
 	private updateAnim() {
 		//if we are at question 1 and not looking for the anwser animation
