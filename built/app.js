@@ -92,8 +92,7 @@ class HelloWorld {
         const nextButtonBehavior = this.next.setBehavior(MRE.ButtonBehavior);
         const previousButtonBehavior = this.previous.setBehavior(MRE.ButtonBehavior);
         const showAnwserButtonBehavior = this.showAnwser.setBehavior(MRE.ButtonBehavior);
-        //if next is pressed add 1 to question number, destroy the current animation,
-        //and update it to the new animation. 
+        //if previous is pressed subtract 1 to question number, set isAnwser to false, and update animation. 
         nextButtonBehavior.onClick(_ => {
             if (this.questionNumber < 3) {
                 this.isAnwser = false;
@@ -104,10 +103,8 @@ class HelloWorld {
                 this.updateAnim();
             }
         });
-        //if previous is pressed subtract 1 to question number, set isAnwser to false,
-        //destroy the current animation, and update it to the new animation. 
+        //if previous is pressed, subtract 1 to question number, set isAnwser to false, and update animation. 
         previousButtonBehavior.onClick(_ => {
-            //only if there is another question to go to
             if (this.questionNumber > 1) {
                 this.isAnwser = false;
                 this.anwserBackground.destroy();
@@ -131,6 +128,7 @@ class HelloWorld {
             this.updateAnim();
         });
     }
+    //returns an MRE actor given the arguments below 
     createKit(name, artifactID, kitPos, kitScale, kitRotation) {
         this.temp = MRE.Actor.CreateFromLibrary(this.context, {
             resourceId: artifactID,
@@ -151,101 +149,29 @@ class HelloWorld {
         //if we are at question 1 and not looking for the anwser animation
         //display question 1 animation and update currentQuestion pointer
         if (this.questionNumber === 1 && !this.isAnwser) {
-            this.Q1 = MRE.Actor.CreateFromLibrary(this.context, {
-                resourceId: "artifact:1456639080749072774",
-                actor: {
-                    name: 'IUMeetup5 > Vector3static',
-                    transform: {
-                        local: {
-                            position: { x: -.7, y: 1.0, z: -0.1 },
-                            rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians),
-                            scale: { x: 0.4, y: 0.4, z: 0.4 }
-                        }
-                    }
-                }
-            });
+            this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774", this.animPos, this.animScale, this.animRot);
             this.currentQuestion = this.Q1;
         }
         else if (this.questionNumber === 1 && this.isAnwser) {
-            this.Q1A = MRE.Actor.CreateFromLibrary(this.context, {
-                resourceId: "artifact:1456639073140605316",
-                actor: {
-                    name: 'IUMeetup5 > Vector3anim',
-                    transform: {
-                        local: {
-                            position: { x: -.7, y: 1.0, z: -0.1 },
-                            rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians),
-                            scale: { x: 0.4, y: 0.4, z: 0.4 }
-                        }
-                    }
-                }
-            });
+            this.Q1A = this.createKit('IUMeetup5 > Vector3anim', "artifact:1456639073140605316", this.animPos, this.animScale, this.animRot);
             this.currentQuestion = this.Q1A;
         }
         //if we are at question 2 and not looking for the anwser animation
         //display question 2 animation and update currentQuestion pointer
         else if (this.questionNumber === 2 && !this.isAnwser) {
-            this.Q2 = MRE.Actor.CreateFromLibrary(this.context, {
-                resourceId: "artifact:1456650297098109130",
-                actor: {
-                    name: 'IUMeetup5 > Trans Static',
-                    transform: {
-                        local: {
-                            position: { x: -.7, y: 1.0, z: -0.1 },
-                            rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians),
-                            scale: { x: 0.4, y: 0.4, z: 0.4 }
-                        }
-                    }
-                }
-            });
+            this.Q2 = this.createKit('IUMeetup5 > Trans Static', "artifact:1461016044742115537", this.animPos, this.animScale, this.animRot);
             this.currentQuestion = this.Q2;
         }
         else if (this.questionNumber === 2 && this.isAnwser) {
-            this.Q2A = MRE.Actor.CreateFromLibrary(this.context, {
-                resourceId: "artifact:1456650296703844553",
-                actor: {
-                    name: 'IUMeetup5 > Trans Amin',
-                    transform: {
-                        local: {
-                            position: { x: -.7, y: 1.0, z: -0.1 },
-                            rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians),
-                            scale: { x: 0.4, y: 0.4, z: 0.4 }
-                        }
-                    }
-                }
-            });
+            this.Q2A = this.createKit('IUMeetup5 > Trans Amin', "artifact:1456650296703844553", this.animPos, this.animScale, this.animRot);
             this.currentQuestion = this.Q2A;
         }
         else if (this.questionNumber === 3 && !this.isAnwser) {
-            this.Q3 = MRE.Actor.CreateFromLibrary(this.context, {
-                resourceId: "artifact:1456774319194505946",
-                actor: {
-                    name: 'IUMeetup5 > Prefab Static',
-                    transform: {
-                        local: {
-                            position: { x: -.7, y: 1.0, z: -0.1 },
-                            rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians),
-                            scale: { x: 0.4, y: 0.4, z: 0.4 }
-                        }
-                    }
-                }
-            });
+            this.Q3 = this.createKit('IUMeetup5 > Prefab Static', "artifact:1456774319194505946", this.animPos, this.animScale, this.animRot);
             this.currentQuestion = this.Q3;
         }
         else if (this.questionNumber === 3 && this.isAnwser) {
-            this.Q3A = MRE.Actor.CreateFromLibrary(this.context, {
-                resourceId: "artifact:1456782914212593752",
-                actor: {
-                    name: 'IUMeetup5 > Prefab Anim',
-                    transform: {
-                        local: {
-                            position: { x: -.7, y: 1.0, z: -0.1 },
-                            rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians),
-                            scale: { x: 0.4, y: 0.4, z: 0.4 }
-                        }
-                    }
-                }
-            });
+            this.Q3A = this.createKit('IUMeetup5 > Prefab Anim', "artifact:1456782914212593752", this.animPos, this.animScale, this.animRot);
             this.currentQuestion = this.Q3A;
         }
         //if (this.questionNumber === 4 && this.isAnwser) {
