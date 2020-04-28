@@ -15,6 +15,17 @@ export default class HelloWorld {
     private anwserBackground;
     private start;
     private light;
+    private anwserBackgroundPos;
+    private anwserPos;
+    private nextPos;
+    private prevPos;
+    private startPos;
+    private buttonRot;
+    private buttonScale;
+    private animPos;
+    private animScale;
+    private animRot;
+    private temp;
     private Q1;
     private Q2;
     private Q3;
@@ -41,7 +52,7 @@ export default class HelloWorld {
     private started;
     private beginQuiz;
     private updateQuestion;
-    private updateAnwserBackground;
+    private createKit;
     private updateAnim;
 }
 //# sourceMappingURL=app.d.ts.map

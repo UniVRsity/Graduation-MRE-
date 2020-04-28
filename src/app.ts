@@ -21,6 +21,22 @@ export default class HelloWorld {
 	private start: MRE.Actor = null;
 	private light: MRE.Actor = null;
 
+	private anwserBackgroundPos: MRE.Vector3 = MRE.Vector3.FromArray([-1.75, 0.0, -0.2]);
+	private anwserPos: MRE.Vector3 = MRE.Vector3.FromArray([-1.75, 0.0, -0.1]);
+	private nextPos: MRE.Vector3 = MRE.Vector3.FromArray([-.4, 0.0, -0.1]);
+	private prevPos: MRE.Vector3 = MRE.Vector3.FromArray([0, 0.0, -0.1]);
+	private startPos: MRE.Vector3 = MRE.Vector3.FromArray([-.4, 0.0, -0.1]);
+
+	private buttonRot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians);
+
+	private buttonScale: MRE.Vector3 = MRE.Vector3.FromArray([0.08, 0.08, 0.08]);
+
+	private animPos: MRE.Vector3 = MRE.Vector3.FromArray([-.7, 1.0,-0.1]);
+	private animScale: MRE.Vector3 = MRE.Vector3.FromArray([.4, .4, .4]);
+	private animRot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians);
+
+	private temp: MRE.Actor = null;
+
 	private Q1: MRE.Actor = null;
 	private Q2: MRE.Actor = null;
 	private Q3: MRE.Actor = null;
@@ -38,6 +54,7 @@ export default class HelloWorld {
 	private Q6A: MRE.Actor = null;
 	private Q7A: MRE.Actor = null;
 	private Q8A: MRE.Actor = null;
+	
 
 
 
@@ -56,20 +73,8 @@ export default class HelloWorld {
 	 */
 	private started() {
 		//create start icon 
-		this.start = MRE.Actor.CreateFromLibrary(this.context, {
-			resourceId: "artifact:1459632933429052299",
-			actor: {
-				name: 'Next Button > Start',
-
-				transform: {
-					local: {
-						position: { x: -.4, y: 0.0, z: -0.1 },
-						rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians),
-						scale: { x: 0.08, y: 0.08, z: 0.08 }
-					}
-				}
-			}
-		});
+		this.start = this.createKit('Next Button > Start', "artifact:1459632933429052299",
+			this.startPos, this.buttonScale, this.buttonRot);
 		//make start a button
 		const startButtonBehavior = this.start.setBehavior(MRE.ButtonBehavior);
 		// When clicked trigger quiz interface and put up first question 
@@ -82,67 +87,22 @@ export default class HelloWorld {
 	}
 	private beginQuiz() {
 		//create next icon  
-		this.next = MRE.Actor.CreateFromLibrary(this.context, {
-			resourceId: "artifact:1459550776266326323",
-			actor: {
-				name: 'Next Button > Next Button',
-
-				transform: {
-					local: {
-						position: { x: -.4, y: 0.0, z: -0.1 },
-						rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians),
-						scale: { x: 0.08, y: 0.08, z: 0.08 }
-					}
-				}
-			}
-		});
+		this.next = this.createKit('Next Button > Next Button', "artifact:1459550776266326323",
+			this.nextPos, this.buttonScale, this.buttonRot);
 
 		//create previous icon 
-		this.previous = MRE.Actor.CreateFromLibrary(this.context, {
-			resourceId: "artifact:1459576871355154850",
-			actor: {
-				name: 'Next Button > Prev',
+		this.previous = this.createKit('Next Button > Prev', "artifact:1459576871355154850",
+			this.prevPos, this.buttonScale, this.buttonRot);
 
-				transform: {
-					local: {
-						position: { x: 0, y: 0.0, z: -0.1 },
-						rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians),
-						scale: { x: 0.08, y: 0.08, z: 0.08 }
-					}
-				}
-			}
-		});
-		this.showAnwser = MRE.Actor.CreateFromLibrary(this.context, {
-			resourceId: "artifact:1460403930600046846",
-			actor: {
-				name: 'Next Button > Show Anwser',
+		this.showAnwser = this.createKit('Next Button > Show Anwser', "artifact:1460403930600046846",
+			this.anwserPos, this.buttonScale, this.buttonRot);
 
-				transform: {
-					local: {
-						position: { x: -1.75, y: 0.0, z: -0.1 },
-						rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians),
-						scale: { x: 0.08, y: 0.08, z: 0.08 }
-					}
-				}
-			}
-		});
-		this.updateAnwserBackground('Next Button > Anwser Off Back', "artifact:1460401277014901205");
+		this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205",
+			this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
 
 		//display first question animation by default 
-		this.Q1 = MRE.Actor.CreateFromLibrary(this.context, {
-			resourceId: "artifact:1456639080749072774",
-			actor: {
-				name: 'IUMeetup5 > Vector3static',
-
-				transform: {
-					local: {
-						position: { x: -.7, y: 1.0, z: -0.1 },
-						rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians),
-						scale: { x: 0.4, y: 0.4, z: 0.4 }
-					}
-				}
-			}
-		});
+		this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774",
+			this.animPos, this.animScale, this.animRot);
 		this.currentQuestion = this.Q1;
 		this.updateQuestion();
 	}
@@ -160,6 +120,9 @@ export default class HelloWorld {
 		nextButtonBehavior.onClick(_ => {
 			if (this.questionNumber < 3) {
 				this.isAnwser = false;
+				this.anwserBackground.destroy();
+				this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205",
+					this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
 				this.questionNumber++;
 				this.currentQuestion.destroy();
 				this.updateAnim();
@@ -171,6 +134,9 @@ export default class HelloWorld {
 			//only if there is another question to go to
 			if (this.questionNumber > 1) {
 				this.isAnwser = false;
+				this.anwserBackground.destroy();
+				this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205",
+					this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
 				this.questionNumber--;
 				this.currentQuestion.destroy();
 				this.updateAnim();
@@ -181,10 +147,12 @@ export default class HelloWorld {
 			this.isAnwser = !this.isAnwser;
 			this.anwserBackground.destroy();
 			if (this.isAnwser) {
-				this.updateAnwserBackground('Next Button > Anwser On Back', "artifact:1460401277274948054");
+				this.anwserBackground = this.createKit('Next Button > Anwser On Back', "artifact:1460401277274948054",
+					this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
 			}
 			else {
-				this.updateAnwserBackground('Next Button > Anwser Off Back', "artifact:1460401277014901205");
+				this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205",
+					this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
 			}
 			this.currentQuestion.destroy();
 			this.updateAnim();
@@ -192,21 +160,23 @@ export default class HelloWorld {
 
 	}
 
-	private updateAnwserBackground(name: string, artifactID: string) {
-			this.anwserBackground = MRE.Actor.CreateFromLibrary(this.context, {
-				resourceId: artifactID,
-				actor: {
-					name: name,
+	private createKit(name: string, artifactID: string, kitPos: MRE.Vector3,
+		kitScale: MRE.Vector3, kitRotation: MRE.Quaternion): MRE.Actor {
+		this.temp = MRE.Actor.CreateFromLibrary(this.context, {
+			resourceId: artifactID,
+			actor: {
+				name: name,
 
-					transform: {
-						local: {
-							position: { x: -1.75, y: 0.0, z: -0.5 },
-							rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians),
-							scale: { x: 0.08, y: 0.08, z: 0.08 }
-						}
+				transform: {
+					local: {
+						position: kitPos,
+						rotation: kitRotation,
+						scale: kitScale
 					}
 				}
-			});
+			}
+		});
+		return this.temp;
 	}
 
 	private updateAnim() {

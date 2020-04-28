@@ -26,6 +26,17 @@ class HelloWorld {
         this.anwserBackground = null;
         this.start = null;
         this.light = null;
+        this.anwserBackgroundPos = MRE.Vector3.FromArray([-1.75, 0.0, -0.2]);
+        this.anwserPos = MRE.Vector3.FromArray([-1.75, 0.0, -0.1]);
+        this.nextPos = MRE.Vector3.FromArray([-.4, 0.0, -0.1]);
+        this.prevPos = MRE.Vector3.FromArray([0, 0.0, -0.1]);
+        this.startPos = MRE.Vector3.FromArray([-.4, 0.0, -0.1]);
+        this.buttonRot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians);
+        this.buttonScale = MRE.Vector3.FromArray([0.08, 0.08, 0.08]);
+        this.animPos = MRE.Vector3.FromArray([-.7, 1.0, -0.1]);
+        this.animScale = MRE.Vector3.FromArray([.4, .4, .4]);
+        this.animRot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians);
+        this.temp = null;
         this.Q1 = null;
         this.Q2 = null;
         this.Q3 = null;
@@ -52,19 +63,7 @@ class HelloWorld {
      */
     started() {
         //create start icon 
-        this.start = MRE.Actor.CreateFromLibrary(this.context, {
-            resourceId: "artifact:1459632933429052299",
-            actor: {
-                name: 'Next Button > Start',
-                transform: {
-                    local: {
-                        position: { x: -.4, y: 0.0, z: -0.1 },
-                        rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians),
-                        scale: { x: 0.08, y: 0.08, z: 0.08 }
-                    }
-                }
-            }
-        });
+        this.start = this.createKit('Next Button > Start', "artifact:1459632933429052299", this.startPos, this.buttonScale, this.buttonRot);
         //make start a button
         const startButtonBehavior = this.start.setBehavior(MRE.ButtonBehavior);
         // When clicked trigger quiz interface and put up first question 
@@ -77,61 +76,13 @@ class HelloWorld {
     }
     beginQuiz() {
         //create next icon  
-        this.next = MRE.Actor.CreateFromLibrary(this.context, {
-            resourceId: "artifact:1459550776266326323",
-            actor: {
-                name: 'Next Button > Next Button',
-                transform: {
-                    local: {
-                        position: { x: -.4, y: 0.0, z: -0.1 },
-                        rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians),
-                        scale: { x: 0.08, y: 0.08, z: 0.08 }
-                    }
-                }
-            }
-        });
+        this.next = this.createKit('Next Button > Next Button', "artifact:1459550776266326323", this.nextPos, this.buttonScale, this.buttonRot);
         //create previous icon 
-        this.previous = MRE.Actor.CreateFromLibrary(this.context, {
-            resourceId: "artifact:1459576871355154850",
-            actor: {
-                name: 'Next Button > Prev',
-                transform: {
-                    local: {
-                        position: { x: 0, y: 0.0, z: -0.1 },
-                        rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians),
-                        scale: { x: 0.08, y: 0.08, z: 0.08 }
-                    }
-                }
-            }
-        });
-        this.showAnwser = MRE.Actor.CreateFromLibrary(this.context, {
-            resourceId: "artifact:1460403930600046846",
-            actor: {
-                name: 'Next Button > Show Anwser',
-                transform: {
-                    local: {
-                        position: { x: -1.75, y: 0.0, z: -0.1 },
-                        rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians),
-                        scale: { x: 0.08, y: 0.08, z: 0.08 }
-                    }
-                }
-            }
-        });
-        this.updateAnwserBackground('Next Button > Anwser Off Back', "artifact:1460401277014901205");
+        this.previous = this.createKit('Next Button > Prev', "artifact:1459576871355154850", this.prevPos, this.buttonScale, this.buttonRot);
+        this.showAnwser = this.createKit('Next Button > Show Anwser', "artifact:1460403930600046846", this.anwserPos, this.buttonScale, this.buttonRot);
+        this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
         //display first question animation by default 
-        this.Q1 = MRE.Actor.CreateFromLibrary(this.context, {
-            resourceId: "artifact:1456639080749072774",
-            actor: {
-                name: 'IUMeetup5 > Vector3static',
-                transform: {
-                    local: {
-                        position: { x: -.7, y: 1.0, z: -0.1 },
-                        rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians),
-                        scale: { x: 0.4, y: 0.4, z: 0.4 }
-                    }
-                }
-            }
-        });
+        this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774", this.animPos, this.animScale, this.animRot);
         this.currentQuestion = this.Q1;
         this.updateQuestion();
     }
@@ -146,6 +97,8 @@ class HelloWorld {
         nextButtonBehavior.onClick(_ => {
             if (this.questionNumber < 3) {
                 this.isAnwser = false;
+                this.anwserBackground.destroy();
+                this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
                 this.questionNumber++;
                 this.currentQuestion.destroy();
                 this.updateAnim();
@@ -157,6 +110,8 @@ class HelloWorld {
             //only if there is another question to go to
             if (this.questionNumber > 1) {
                 this.isAnwser = false;
+                this.anwserBackground.destroy();
+                this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
                 this.questionNumber--;
                 this.currentQuestion.destroy();
                 this.updateAnim();
@@ -167,29 +122,30 @@ class HelloWorld {
             this.isAnwser = !this.isAnwser;
             this.anwserBackground.destroy();
             if (this.isAnwser) {
-                this.updateAnwserBackground('Next Button > Anwser On Back', "artifact:1460401277274948054");
+                this.anwserBackground = this.createKit('Next Button > Anwser On Back', "artifact:1460401277274948054", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
             }
             else {
-                this.updateAnwserBackground('Next Button > Anwser Off Back', "artifact:1460401277014901205");
+                this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
             }
             this.currentQuestion.destroy();
             this.updateAnim();
         });
     }
-    updateAnwserBackground(name, artifactID) {
-        this.anwserBackground = MRE.Actor.CreateFromLibrary(this.context, {
+    createKit(name, artifactID, kitPos, kitScale, kitRotation) {
+        this.temp = MRE.Actor.CreateFromLibrary(this.context, {
             resourceId: artifactID,
             actor: {
                 name: name,
                 transform: {
                     local: {
-                        position: { x: -1.75, y: 0.0, z: -0.5 },
-                        rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians),
-                        scale: { x: 0.08, y: 0.08, z: 0.08 }
+                        position: kitPos,
+                        rotation: kitRotation,
+                        scale: kitScale
                     }
                 }
             }
         });
+        return this.temp;
     }
     updateAnim() {
         //if we are at question 1 and not looking for the anwser animation
