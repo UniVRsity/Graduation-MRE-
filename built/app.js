@@ -36,6 +36,16 @@ class HelloWorld {
         this.animPos = MRE.Vector3.FromArray([-.7, 1.0, -0.1]);
         this.animScale = MRE.Vector3.FromArray([.4, .4, .4]);
         this.animRot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians);
+        this.Q5Name = "IUMeetup5 > Enemy Dir Static";
+        this.Q5ID = "artifact:1456732643608494774";
+        this.Q5AName = 'IUMeetup5 > Enemy Dir';
+        this.Q5AID = "artifact:1456732643340059317";
+        this.Q6Name = "IUMeetup5 > E Speed Static";
+        this.Q6ID = "artifact:1456755778206564729";
+        this.Q6AName = "IUMeetup5 > E Speed Anim";
+        this.Q6AID = "artifact:1456755778072347000";
+        this.Q7Name = "IUMeetup5 > E Speed Sol";
+        this.Q7ID = "artifact:1456774319068676825";
         this.temp = null;
         this.Q1 = null;
         this.Q2 = null;
@@ -94,7 +104,7 @@ class HelloWorld {
         const showAnwserButtonBehavior = this.showAnwser.setBehavior(MRE.ButtonBehavior);
         //if previous is pressed subtract 1 to question number, set isAnwser to false, and update animation. 
         nextButtonBehavior.onClick(_ => {
-            if (this.questionNumber < 3) {
+            if (this.questionNumber < 7) {
                 this.isAnwser = false;
                 this.anwserBackground.destroy();
                 this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
@@ -159,7 +169,7 @@ class HelloWorld {
         //if we are at question 2 and not looking for the anwser animation
         //display question 2 animation and update currentQuestion pointer
         else if (this.questionNumber === 2 && !this.isAnwser) {
-            this.Q2 = this.createKit('IUMeetup5 > Trans Static', "artifact:1461016044742115537", this.animPos, this.animScale, this.animRot);
+            this.Q2 = this.createKit('IUMeetup5 > Trans Static', "artifact:1461270206671224975", this.animPos, this.animScale, this.animRot);
             this.currentQuestion = this.Q2;
         }
         else if (this.questionNumber === 2 && this.isAnwser) {
@@ -174,21 +184,35 @@ class HelloWorld {
             this.Q3A = this.createKit('IUMeetup5 > Prefab Anim', "artifact:1456782914212593752", this.animPos, this.animScale, this.animRot);
             this.currentQuestion = this.Q3A;
         }
-        //if (this.questionNumber === 4 && this.isAnwser) {
-        //	this.Q1 = MRE.Actor.CreateFromLibrary(this.context, {
-        //		resourceId: "artifact:1456755778072347000",
-        //		actor: {
-        //			name: 'IUMeetup5 > E Speed Anim',
-        //			transform: {
-        //				local: {
-        //					position: { x: -.7, y: 1.0, z: -0.1 },
-        //					rotation: MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians),
-        //					scale: { x: 0.4, y: 0.4, z: 0.4 }
-        //				}
-        //			}
-        //		}
-        //	});
-        //}
+        else if (this.questionNumber === 4 && !this.isAnwser) {
+            this.Q4 = this.createKit('IUMeetup5 > Instance Static', "artifact:1456872393480864276", this.animPos, this.animScale, this.animRot);
+            this.currentQuestion = this.Q4;
+        }
+        else if (this.questionNumber === 4 && this.isAnwser) {
+            this.Q4A = this.createKit('IUMeetup5 > Instance Anim', "artifact:1456872393740911125", this.animPos, this.animScale, this.animRot);
+            this.currentQuestion = this.Q4A;
+        }
+        else if (this.questionNumber === 5 && !this.isAnwser) {
+            this.Q5 = this.createKit(this.Q5Name, this.Q5ID, this.animPos, this.animScale, this.animRot);
+            this.currentQuestion = this.Q5;
+        }
+        else if (this.questionNumber === 5 && this.isAnwser) {
+            this.Q5A = this.createKit(this.Q5AName, this.Q5AID, this.animPos, this.animScale, this.animRot);
+            this.currentQuestion = this.Q5A;
+        }
+        else if (this.questionNumber === 6 && !this.isAnwser) {
+            this.Q6 = this.createKit(this.Q6Name, this.Q6ID, this.animPos, this.animScale, this.animRot);
+            this.currentQuestion = this.Q6;
+        }
+        else if (this.questionNumber === 6 && this.isAnwser) {
+            this.Q6A = this.createKit(this.Q6AName, this.Q6AID, this.animPos, this.animScale, this.animRot);
+            this.currentQuestion = this.Q6A;
+        }
+        else if (this.questionNumber === 7 && !this.isAnwser) {
+            this.Q7 = this.createKit(this.Q7Name, this.Q7ID, this.animPos, this.animScale, this.animRot);
+            this.currentQuestion = this.Q7;
+        }
+        //questions how do read data from database file
     }
 }
 exports.default = HelloWorld;

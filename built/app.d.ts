@@ -25,6 +25,16 @@ export default class HelloWorld {
     private animPos;
     private animScale;
     private animRot;
+    private Q5Name;
+    private Q5ID;
+    private Q5AName;
+    private Q5AID;
+    private Q6Name;
+    private Q6ID;
+    private Q6AName;
+    private Q6AID;
+    private Q7Name;
+    private Q7ID;
     private temp;
     private Q1;
     private Q2;

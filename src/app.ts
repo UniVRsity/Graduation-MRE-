@@ -35,6 +35,19 @@ export default class HelloWorld {
 	private animScale: MRE.Vector3 = MRE.Vector3.FromArray([.4, .4, .4]);
 	private animRot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians);
 
+	private Q5Name= "IUMeetup5 > Enemy Dir Static";
+	private Q5ID = "artifact:1456732643608494774";
+	private Q5AName = 'IUMeetup5 > Enemy Dir';
+	private Q5AID = "artifact:1456732643340059317";
+
+	private Q6Name = "IUMeetup5 > E Speed Static";
+	private Q6ID = "artifact:1456755778206564729";
+	private Q6AName = "IUMeetup5 > E Speed Anim";
+	private Q6AID = "artifact:1456755778072347000";
+
+	private Q7Name = "IUMeetup5 > E Speed Sol";
+	private Q7ID = "artifact:1456774319068676825";
+
 	private temp: MRE.Actor = null;
 
 	private Q1: MRE.Actor = null;
@@ -55,7 +68,6 @@ export default class HelloWorld {
 	private Q7A: MRE.Actor = null;
 	private Q8A: MRE.Actor = null;
 	
-
 
 
 	questionNumber = 0;
@@ -117,7 +129,7 @@ export default class HelloWorld {
 
 		//if previous is pressed subtract 1 to question number, set isAnwser to false, and update animation. 
 		nextButtonBehavior.onClick(_ => {
-			if (this.questionNumber < 3) {
+			if (this.questionNumber < 7) {
 				this.isAnwser = false;
 				this.anwserBackground.destroy();
 				this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205",
@@ -192,7 +204,7 @@ export default class HelloWorld {
 		//if we are at question 2 and not looking for the anwser animation
 		//display question 2 animation and update currentQuestion pointer
 		else if (this.questionNumber === 2 && !this.isAnwser) {
-			this.Q2 = this.createKit('IUMeetup5 > Trans Static', "artifact:1461016044742115537",
+			this.Q2 = this.createKit('IUMeetup5 > Trans Static', "artifact:1461270206671224975",
 			this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q2;
 		}
@@ -225,6 +237,33 @@ export default class HelloWorld {
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q4A;
 		}
+		else if (this.questionNumber === 5 && !this.isAnwser) {
+			this.Q5 = this.createKit(this.Q5Name, this.Q5ID,
+				this.animPos, this.animScale, this.animRot);
+			this.currentQuestion = this.Q5;
+		}
+		else if (this.questionNumber === 5 && this.isAnwser) {
+			this.Q5A = this.createKit(this.Q5AName, this.Q5AID,
+				this.animPos, this.animScale, this.animRot);
+			this.currentQuestion = this.Q5A;
+		}
+		else if (this.questionNumber === 6 && !this.isAnwser) {
+			this.Q6 = this.createKit(this.Q6Name, this.Q6ID,
+				this.animPos, this.animScale, this.animRot);
+			this.currentQuestion = this.Q6;
+		}
+		else if (this.questionNumber === 6 && this.isAnwser) {
+			this.Q6A = this.createKit(this.Q6AName, this.Q6AID,
+				this.animPos, this.animScale, this.animRot);
+			this.currentQuestion = this.Q6A;
+		}
+		else if (this.questionNumber === 7 && !this.isAnwser) {
+			this.Q7 = this.createKit(this.Q7Name, this.Q7ID,
+				this.animPos, this.animScale, this.animRot);
+			this.currentQuestion = this.Q7;
+		}
+
+		//questions how do read data from database file
 
 	}
 }
