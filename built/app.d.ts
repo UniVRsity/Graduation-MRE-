@@ -26,8 +26,14 @@ export default class VRQuiz {
     private animScale;
     private animRot;
     private Q12Rot;
-    private choice1Pos;
-    private C1CubePos;
+    private C1TextPos;
+    private C1ButtonPos;
+    private C2TextPos;
+    private C2ButtonPos;
+    private C3TextPos;
+    private C3ButtonPos;
+    private C4TextPos;
+    private C4ButtonPos;
     private Q5Name;
     private Q5ID;
     private Q5AName;
@@ -55,9 +61,18 @@ export default class VRQuiz {
     private Q6A;
     private Q7A;
     private Q8A;
-    private choice1;
-    private choice1Cube;
+    private choice1Text;
+    private choice1Button;
     private choice1Count;
+    private choice2Text;
+    private choice2Button;
+    private choice2Count;
+    private choice3Text;
+    private choice3Button;
+    private choice3Count;
+    private choice4Text;
+    private choice4Button;
+    private choice4Count;
     private adminID;
     questionNumber: number;
     isAnwser: boolean;
@@ -69,8 +84,11 @@ export default class VRQuiz {
      */
     private started;
     private beginQuiz;
-    private updateButtons;
+    private setNavButtons;
+    private setChoicesButtons;
+    private resetChoices;
     private createKit;
+    private createText;
     private updateAnim;
 }
 //# sourceMappingURL=app.d.ts.map

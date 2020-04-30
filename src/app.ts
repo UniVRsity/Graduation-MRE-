@@ -33,8 +33,18 @@ export default class VRQuiz {
 	private animRot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians);
 	private Q12Rot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -410 * MRE.DegreesToRadians);
 
-	private choice1Pos: MRE.Vector3 = new MRE.Vector3(-5, .5, -0.1);
-	private C1CubePos: MRE.Vector3 = new MRE.Vector3(-5, -.5, -0.1);
+	private C1TextPos: MRE.Vector3 = new MRE.Vector3(-4, .5, -0.1);
+	private C1ButtonPos: MRE.Vector3 = new MRE.Vector3(-4, -.5, -0.1);
+
+	private C2TextPos: MRE.Vector3 = new MRE.Vector3(-5, .5, -0.1);
+	private C2ButtonPos: MRE.Vector3 = new MRE.Vector3(-5, -.5, -0.1);
+
+	private C3TextPos: MRE.Vector3 = new MRE.Vector3(-6, .5, -0.1);
+	private C3ButtonPos: MRE.Vector3 = new MRE.Vector3(-6, -.5, -0.1);
+
+	private C4TextPos: MRE.Vector3 = new MRE.Vector3(-7, .5, -0.1);
+	private C4ButtonPos: MRE.Vector3 = new MRE.Vector3(-7, -.5, -0.1);
+
 
 	private Q5Name = "IUMeetup5 > Enemy Dir Static";
 	private Q5ID = "artifact:1456732643608494774";
@@ -69,9 +79,21 @@ export default class VRQuiz {
 	private Q7A: MRE.Actor = null;
 	private Q8A: MRE.Actor = null;
 
-	private choice1: MRE.Actor = null;
-	private choice1Cube: MRE.Actor = null;
+	private choice1Text: MRE.Actor = null;
+	private choice1Button: MRE.Actor = null;
 	private choice1Count = 0;
+
+	private choice2Text: MRE.Actor = null;
+	private choice2Button: MRE.Actor = null;
+	private choice2Count = 0;
+
+	private choice3Text: MRE.Actor = null;
+	private choice3Button: MRE.Actor = null;
+	private choice3Count = 0;
+
+	private choice4Text: MRE.Actor = null;
+	private choice4Button: MRE.Actor = null;
+	private choice4Count = 0;
 
 	private adminID: any = null;
 
@@ -123,39 +145,41 @@ export default class VRQuiz {
 			this.animPos, this.animScale, this.Q12Rot);
 		this.currentQuestion = this.Q1;
 
-		this.choice1Cube = this.createKit('IUMeetup5 > Choice1', "artifact:1462468918881813077",
-			this.C1CubePos, this.animScale, this.buttonRot); 
-		this.choice1 = MRE.Actor.Create(this.context, {
-			actor: {
-				name: 'choice1',
-				transform: {
-					app: { position: this.choice1Pos }
-				},
-				text: {
-					contents: this.choice1Count.toString(),
-					anchor: MRE.TextAnchorLocation.MiddleCenter,
-					color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
-					height: 0.3
-				}
-			}
-		});
-		this.updateButtons();
+
+		this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
+		this.choice1Button = this.createKit('IUMeetup5 > Choice 1', "artifact:1462468918881813077",
+			this.C1ButtonPos, this.animScale, this.buttonRot);
+
+		this.choice2Text = this.createText('choice 2', this.C2TextPos, this.choice1Count.toString());
+		this.choice2Button = this.createKit('IUMeetup5 > Choice1', "artifact:1462468918881813077",
+			this.C2ButtonPos, this.animScale, this.buttonRot);
+
+		this.choice3Text = this.createText('choice 3', this.C3TextPos, this.choice1Count.toString());
+		this.choice3Button = this.createKit('IUMeetup5 > Choice1', "artifact:1462468918881813077",
+			this.C3ButtonPos, this.animScale, this.buttonRot);
+
+		this.choice4Text = this.createText('choice 4', this.C4TextPos, this.choice1Count.toString());
+		this.choice4Button = this.createKit('IUMeetup5 > Choice1', "artifact:1462468918881813077",
+			this.C4ButtonPos, this.animScale, this.buttonRot);
+
+		this.setNavButtons();
+		this.setChoicesButtons();
 	}
 
 	//updates state based on user input 
-	private updateButtons() {
+	private setNavButtons() {
 
 		//make next, previous, and Anwser icon into button 
 		const nextButtonBehavior = this.next.setBehavior(MRE.ButtonBehavior);
 		const previousButtonBehavior = this.previous.setBehavior(MRE.ButtonBehavior);
 		const showAnwserButtonBehavior = this.showAnwser.setBehavior(MRE.ButtonBehavior);
 
-		const choice1ButtonBehavior = this.choice1Cube.setBehavior(MRE.ButtonBehavior);
 
-
-		//if previous is pressed subtract 1 to question number, set isAnwser to false, and update animation. 
+		//if previous is pressed subtract 1 to question number, set isAnwser to false, and update animation,
+		//and reset the choices count
 		nextButtonBehavior.onClick(user => {
 			if (this.questionNumber < 7 && user.id === this.adminID) {
+				this.resetChoices();
 				this.isAnwser = false;
 				this.anwserBackground.destroy();
 				this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205",
@@ -168,6 +192,7 @@ export default class VRQuiz {
 		//if previous is pressed, subtract 1 to question number, set isAnwser to false, and update animation. 
 		previousButtonBehavior.onClick(user => {
 			if (this.questionNumber > 1 && user.id === this.adminID) {
+				this.resetChoices();
 				this.isAnwser = false;
 				this.anwserBackground.destroy();
 				this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205",
@@ -196,37 +221,75 @@ export default class VRQuiz {
 				this.updateAnim();
 			}
 		});
+		this.setChoicesButtons();
+	}
+
+	private setChoicesButtons() {
+		const choice1ButtonBehavior = this.choice1Button.setBehavior(MRE.ButtonBehavior);
+		const choice2ButtonBehavior = this.choice2Button.setBehavior(MRE.ButtonBehavior);
+		const choice3ButtonBehavior = this.choice3Button.setBehavior(MRE.ButtonBehavior);
+		const choice4ButtonBehavior = this.choice4Button.setBehavior(MRE.ButtonBehavior);
 
 		choice1ButtonBehavior.onClick(user => {
 			if (!this.usersVoted.includes(user.id)) {
 				this.usersVoted.push(user.id);
 				this.choice1Count++;
-				this.choice1.destroy();
-				this.choice1 = MRE.Actor.Create(this.context, {
-					actor: {
-						name: 'choice1',
-						transform: {
-							app: {
-								position: this.choice1Pos,
-								rotation: this.buttonRot
-							}
-						},
-						text: {
-							contents: this.choice1Count.toString(),
-							anchor: MRE.TextAnchorLocation.MiddleCenter,
-							color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
-							height: 0.3
-						}
-					}
-				});
+				this.choice1Text.destroy();
+				this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
+			}
+		});
+		choice2ButtonBehavior.onClick(user => {
+			if (!this.usersVoted.includes(user.id)) {
+				this.usersVoted.push(user.id);
+				this.choice2Count++;
+				this.choice2Text.destroy();
+				this.choice2Text = this.createText('choice 2', this.C2TextPos, this.choice2Count.toString());
 			}
 		});
 
+		choice3ButtonBehavior.onClick(user => {
+			if (!this.usersVoted.includes(user.id)) {
+				this.usersVoted.push(user.id);
+				this.choice3Count++;
+				this.choice3Text.destroy();
+				this.choice3Text = this.createText('choice 3', this.C3TextPos, this.choice3Count.toString());
+			}
+		});
 
-
+		choice4ButtonBehavior.onClick(user => {
+			if (!this.usersVoted.includes(user.id)) {
+				this.usersVoted.push(user.id);
+				this.choice4Count++;
+				this.choice4Text.destroy();
+				this.choice4Text = this.createText('choice 4', this.C4TextPos, this.choice4Count.toString());
+			}
+		});
 
 	}
 
+		
+	
+
+	//want to set all the counters for the choices to zero and reset the user voters list 
+	private resetChoices() {
+		this.choice1Count = 0;
+		this.choice2Count = 0;
+		this.choice3Count = 0;
+		this.choice4Count = 0;
+
+		this.choice1Text.destroy();
+		this.choice2Text.destroy();
+		this.choice3Text.destroy();
+		this.choice4Text.destroy();
+
+		this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
+		this.choice2Text = this.createText('choice 2', this.C2TextPos, this.choice2Count.toString());
+		this.choice3Text = this.createText('choice 3', this.C3TextPos, this.choice3Count.toString());
+		this.choice4Text = this.createText('choice 4', this.C4TextPos, this.choice4Count.toString());
+
+		this.usersVoted = [MRE.ZeroGuid];
+
+	}
 	//returns an MRE actor given the arguments below 
 	private createKit(name: string, artifactID: string, kitPos: MRE.Vector3,
 		kitScale: MRE.Vector3, kitRotation: MRE.Quaternion): MRE.Actor {
@@ -246,6 +309,28 @@ export default class VRQuiz {
 		});
 		return this.temp;
 	}
+	//returns an MRE actor for text 
+	private createText(name: string, textPos: MRE.Vector3, content: string): MRE.Actor {
+		this.temp = MRE.Actor.Create(this.context, {
+			actor: {
+				name: name,
+				transform: {
+					app: {
+						position: textPos,
+						rotation: this.buttonRot
+					}
+				},
+				text: {
+					contents: content,
+					anchor: MRE.TextAnchorLocation.MiddleCenter,
+					color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
+					height: 0.3
+				}
+			}
+		});
+		return this.temp;
+	}
+
 
 	private updateAnim() {
 		//if we are at question 1 and not looking for the anwser animation

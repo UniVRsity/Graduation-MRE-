@@ -36,8 +36,14 @@ class VRQuiz {
         this.animScale = MRE.Vector3.FromArray([.4, .4, .4]);
         this.animRot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians);
         this.Q12Rot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -410 * MRE.DegreesToRadians);
-        this.choice1Pos = new MRE.Vector3(-5, .5, -0.1);
-        this.C1CubePos = new MRE.Vector3(-5, -.5, -0.1);
+        this.C1TextPos = new MRE.Vector3(-4, .5, -0.1);
+        this.C1ButtonPos = new MRE.Vector3(-4, -.5, -0.1);
+        this.C2TextPos = new MRE.Vector3(-5, .5, -0.1);
+        this.C2ButtonPos = new MRE.Vector3(-5, -.5, -0.1);
+        this.C3TextPos = new MRE.Vector3(-6, .5, -0.1);
+        this.C3ButtonPos = new MRE.Vector3(-6, -.5, -0.1);
+        this.C4TextPos = new MRE.Vector3(-7, .5, -0.1);
+        this.C4ButtonPos = new MRE.Vector3(-7, -.5, -0.1);
         this.Q5Name = "IUMeetup5 > Enemy Dir Static";
         this.Q5ID = "artifact:1456732643608494774";
         this.Q5AName = 'IUMeetup5 > Enemy Dir';
@@ -65,9 +71,18 @@ class VRQuiz {
         this.Q6A = null;
         this.Q7A = null;
         this.Q8A = null;
-        this.choice1 = null;
-        this.choice1Cube = null;
+        this.choice1Text = null;
+        this.choice1Button = null;
         this.choice1Count = 0;
+        this.choice2Text = null;
+        this.choice2Button = null;
+        this.choice2Count = 0;
+        this.choice3Text = null;
+        this.choice3Button = null;
+        this.choice3Count = 0;
+        this.choice4Text = null;
+        this.choice4Button = null;
+        this.choice4Count = 0;
         this.adminID = null;
         this.questionNumber = 0;
         this.isAnwser = false;
@@ -102,33 +117,28 @@ class VRQuiz {
         //display first question animation by default 
         this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774", this.animPos, this.animScale, this.Q12Rot);
         this.currentQuestion = this.Q1;
-        this.choice1Cube = this.createKit('IUMeetup5 > Choice1', "artifact:1462468918881813077", this.C1CubePos, this.animScale, this.buttonRot);
-        this.choice1 = MRE.Actor.Create(this.context, {
-            actor: {
-                name: 'choice1',
-                transform: {
-                    app: { position: this.choice1Pos }
-                },
-                text: {
-                    contents: this.choice1Count.toString(),
-                    anchor: MRE.TextAnchorLocation.MiddleCenter,
-                    color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
-                    height: 0.3
-                }
-            }
-        });
-        this.updateButtons();
+        this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
+        this.choice1Button = this.createKit('IUMeetup5 > Choice 1', "artifact:1462468918881813077", this.C1ButtonPos, this.animScale, this.buttonRot);
+        this.choice2Text = this.createText('choice 2', this.C2TextPos, this.choice1Count.toString());
+        this.choice2Button = this.createKit('IUMeetup5 > Choice1', "artifact:1462468918881813077", this.C2ButtonPos, this.animScale, this.buttonRot);
+        this.choice3Text = this.createText('choice 3', this.C3TextPos, this.choice1Count.toString());
+        this.choice3Button = this.createKit('IUMeetup5 > Choice1', "artifact:1462468918881813077", this.C3ButtonPos, this.animScale, this.buttonRot);
+        this.choice4Text = this.createText('choice 4', this.C4TextPos, this.choice1Count.toString());
+        this.choice4Button = this.createKit('IUMeetup5 > Choice1', "artifact:1462468918881813077", this.C4ButtonPos, this.animScale, this.buttonRot);
+        this.setNavButtons();
+        this.setChoicesButtons();
     }
     //updates state based on user input 
-    updateButtons() {
+    setNavButtons() {
         //make next, previous, and Anwser icon into button 
         const nextButtonBehavior = this.next.setBehavior(MRE.ButtonBehavior);
         const previousButtonBehavior = this.previous.setBehavior(MRE.ButtonBehavior);
         const showAnwserButtonBehavior = this.showAnwser.setBehavior(MRE.ButtonBehavior);
-        const choice1ButtonBehavior = this.choice1Cube.setBehavior(MRE.ButtonBehavior);
-        //if previous is pressed subtract 1 to question number, set isAnwser to false, and update animation. 
+        //if previous is pressed subtract 1 to question number, set isAnwser to false, and update animation,
+        //and reset the choices count
         nextButtonBehavior.onClick(user => {
             if (this.questionNumber < 7 && user.id === this.adminID) {
+                this.resetChoices();
                 this.isAnwser = false;
                 this.anwserBackground.destroy();
                 this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
@@ -140,6 +150,7 @@ class VRQuiz {
         //if previous is pressed, subtract 1 to question number, set isAnwser to false, and update animation. 
         previousButtonBehavior.onClick(user => {
             if (this.questionNumber > 1 && user.id === this.adminID) {
+                this.resetChoices();
                 this.isAnwser = false;
                 this.anwserBackground.destroy();
                 this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
@@ -163,30 +174,61 @@ class VRQuiz {
                 this.updateAnim();
             }
         });
+        this.setChoicesButtons();
+    }
+    setChoicesButtons() {
+        const choice1ButtonBehavior = this.choice1Button.setBehavior(MRE.ButtonBehavior);
+        const choice2ButtonBehavior = this.choice2Button.setBehavior(MRE.ButtonBehavior);
+        const choice3ButtonBehavior = this.choice3Button.setBehavior(MRE.ButtonBehavior);
+        const choice4ButtonBehavior = this.choice4Button.setBehavior(MRE.ButtonBehavior);
         choice1ButtonBehavior.onClick(user => {
             if (!this.usersVoted.includes(user.id)) {
                 this.usersVoted.push(user.id);
                 this.choice1Count++;
-                this.choice1.destroy();
-                this.choice1 = MRE.Actor.Create(this.context, {
-                    actor: {
-                        name: 'choice1',
-                        transform: {
-                            app: {
-                                position: this.choice1Pos,
-                                rotation: this.buttonRot
-                            }
-                        },
-                        text: {
-                            contents: this.choice1Count.toString(),
-                            anchor: MRE.TextAnchorLocation.MiddleCenter,
-                            color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
-                            height: 0.3
-                        }
-                    }
-                });
+                this.choice1Text.destroy();
+                this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
             }
         });
+        choice2ButtonBehavior.onClick(user => {
+            if (!this.usersVoted.includes(user.id)) {
+                this.usersVoted.push(user.id);
+                this.choice2Count++;
+                this.choice2Text.destroy();
+                this.choice2Text = this.createText('choice 2', this.C2TextPos, this.choice2Count.toString());
+            }
+        });
+        choice3ButtonBehavior.onClick(user => {
+            if (!this.usersVoted.includes(user.id)) {
+                this.usersVoted.push(user.id);
+                this.choice3Count++;
+                this.choice3Text.destroy();
+                this.choice3Text = this.createText('choice 3', this.C3TextPos, this.choice3Count.toString());
+            }
+        });
+        choice4ButtonBehavior.onClick(user => {
+            if (!this.usersVoted.includes(user.id)) {
+                this.usersVoted.push(user.id);
+                this.choice4Count++;
+                this.choice4Text.destroy();
+                this.choice4Text = this.createText('choice 4', this.C4TextPos, this.choice4Count.toString());
+            }
+        });
+    }
+    //want to set all the counters for the choices to zero and reset the user voters list 
+    resetChoices() {
+        this.choice1Count = 0;
+        this.choice2Count = 0;
+        this.choice3Count = 0;
+        this.choice4Count = 0;
+        this.choice1Text.destroy();
+        this.choice2Text.destroy();
+        this.choice3Text.destroy();
+        this.choice4Text.destroy();
+        this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
+        this.choice2Text = this.createText('choice 2', this.C2TextPos, this.choice2Count.toString());
+        this.choice3Text = this.createText('choice 3', this.C3TextPos, this.choice3Count.toString());
+        this.choice4Text = this.createText('choice 4', this.C4TextPos, this.choice4Count.toString());
+        this.usersVoted = [MRE.ZeroGuid];
     }
     //returns an MRE actor given the arguments below 
     createKit(name, artifactID, kitPos, kitScale, kitRotation) {
@@ -200,6 +242,27 @@ class VRQuiz {
                         rotation: kitRotation,
                         scale: kitScale
                     }
+                }
+            }
+        });
+        return this.temp;
+    }
+    //returns an MRE actor for text 
+    createText(name, textPos, content) {
+        this.temp = MRE.Actor.Create(this.context, {
+            actor: {
+                name: name,
+                transform: {
+                    app: {
+                        position: textPos,
+                        rotation: this.buttonRot
+                    }
+                },
+                text: {
+                    contents: content,
+                    anchor: MRE.TextAnchorLocation.MiddleCenter,
+                    color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
+                    height: 0.3
                 }
             }
         });
