@@ -5,15 +5,10 @@
 
 import * as MRE from '@microsoft/mixed-reality-extension-sdk';
 
-
 /**
  * The main class of this app. All the logic goes here.
  */
-
-
-//var currentQu: number = 0;
 export default class HelloWorld {
-
 	private next: MRE.Actor = null;
 	private previous: MRE.Actor = null;
 	private showAnwser: MRE.Actor = null;
@@ -29,13 +24,15 @@ export default class HelloWorld {
 
 	private buttonRot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians);
 
+
 	private buttonScale: MRE.Vector3 = MRE.Vector3.FromArray([0.08, 0.08, 0.08]);
 
-	private animPos: MRE.Vector3 = MRE.Vector3.FromArray([-.7, 1.0,-0.1]);
+	private animPos: MRE.Vector3 = MRE.Vector3.FromArray([-.7, 1.0, -0.1]);
 	private animScale: MRE.Vector3 = MRE.Vector3.FromArray([.4, .4, .4]);
 	private animRot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians);
+	private Q12Rot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -330 * MRE.DegreesToRadians);
 
-	private Q5Name= "IUMeetup5 > Enemy Dir Static";
+	private Q5Name = "IUMeetup5 > Enemy Dir Static";
 	private Q5ID = "artifact:1456732643608494774";
 	private Q5AName = 'IUMeetup5 > Enemy Dir';
 	private Q5AID = "artifact:1456732643340059317";
@@ -67,8 +64,8 @@ export default class HelloWorld {
 	private Q6A: MRE.Actor = null;
 	private Q7A: MRE.Actor = null;
 	private Q8A: MRE.Actor = null;
-	
 
+	private adminID: any = null;
 
 	questionNumber = 0;
 	isAnwser = false;
@@ -90,11 +87,12 @@ export default class HelloWorld {
 		//make start a button
 		const startButtonBehavior = this.start.setBehavior(MRE.ButtonBehavior);
 		// When clicked trigger quiz interface and put up first question 
-		startButtonBehavior.onClick(_ => {
+		startButtonBehavior.onClick(user => {
 			this.start.destroy();
 			//change question number to 1
 			this.questionNumber++;
 			this.beginQuiz();
+			this.adminID = user.id;
 		});
 	}
 	private beginQuiz() {
@@ -114,7 +112,7 @@ export default class HelloWorld {
 
 		//display first question animation by default 
 		this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774",
-			this.animPos, this.animScale, this.animRot);
+			this.animPos, this.animScale, this.Q12Rot);
 		this.currentQuestion = this.Q1;
 		this.updateQuestion();
 	}
@@ -128,8 +126,8 @@ export default class HelloWorld {
 		const showAnwserButtonBehavior = this.showAnwser.setBehavior(MRE.ButtonBehavior);
 
 		//if previous is pressed subtract 1 to question number, set isAnwser to false, and update animation. 
-		nextButtonBehavior.onClick(_ => {
-			if (this.questionNumber < 7) {
+		nextButtonBehavior.onClick(user => {
+			if (this.questionNumber < 7 && user.id === this.adminID) {
 				this.isAnwser = false;
 				this.anwserBackground.destroy();
 				this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205",
@@ -140,8 +138,8 @@ export default class HelloWorld {
 			}
 		});
 		//if previous is pressed, subtract 1 to question number, set isAnwser to false, and update animation. 
-		previousButtonBehavior.onClick(_ => {
-			if (this.questionNumber > 1) {
+		previousButtonBehavior.onClick(user => {
+			if (this.questionNumber > 1 && user.id === this.adminID) {
 				this.isAnwser = false;
 				this.anwserBackground.destroy();
 				this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205",
@@ -152,20 +150,25 @@ export default class HelloWorld {
 			}
 		});
 		//if anwserOff is pressed destroy it and enable anwserOn icon and update the animation 
-		showAnwserButtonBehavior.onClick(_ => {
-			this.isAnwser = !this.isAnwser;
-			this.anwserBackground.destroy();
-			if (this.isAnwser) {
-				this.anwserBackground = this.createKit('Next Button > Anwser On Back', "artifact:1460401277274948054",
-					this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
+		showAnwserButtonBehavior.onClick(user => {
+			if (user.id === this.adminID) {
+				this.isAnwser = !this.isAnwser;
+				this.anwserBackground.destroy();
+				if (this.isAnwser) {
+					this.anwserBackground = this.createKit('Next Button > Anwser On Back', "artifact:1460401277274948054",
+						this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
+				}
+				else {
+					this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205",
+						this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
+				}
+				this.currentQuestion.destroy();
+				this.updateAnim();
 			}
-			else {
-				this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205",
-					this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
-			}
-			this.currentQuestion.destroy();
-			this.updateAnim();
 		});
+
+
+
 
 	}
 	//returns an MRE actor given the arguments below 
@@ -193,25 +196,25 @@ export default class HelloWorld {
 		//display question 1 animation and update currentQuestion pointer
 		if (this.questionNumber === 1 && !this.isAnwser) {
 			this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774",
-				this.animPos, this.animScale, this.animRot);
+				this.animPos, this.animScale, this.Q12Rot);
 			this.currentQuestion = this.Q1;
 		}
 		else if (this.questionNumber === 1 && this.isAnwser) {
 			this.Q1A = this.createKit('IUMeetup5 > Vector3anim', "artifact:1456639073140605316",
-				this.animPos, this.animScale, this.animRot);
+				this.animPos, this.animScale, this.Q12Rot);
 			this.currentQuestion = this.Q1A;
 		}
 		//if we are at question 2 and not looking for the anwser animation
 		//display question 2 animation and update currentQuestion pointer
 		else if (this.questionNumber === 2 && !this.isAnwser) {
 			this.Q2 = this.createKit('IUMeetup5 > Trans Static', "artifact:1461270206671224975",
-			this.animPos, this.animScale, this.animRot);
+				this.animPos, this.animScale, this.Q12Rot);
 			this.currentQuestion = this.Q2;
 		}
 
 		else if (this.questionNumber === 2 && this.isAnwser) {
 			this.Q2A = this.createKit('IUMeetup5 > Trans Amin', "artifact:1456650296703844553",
-			this.animPos, this.animScale, this.animRot);
+				this.animPos, this.animScale, this.Q12Rot);
 			this.currentQuestion = this.Q2A;
 		}
 

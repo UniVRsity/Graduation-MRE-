@@ -1,5 +1,8 @@
-FROM node:10.16-alpine
+FROM node:8.12.0-alpine
 WORKDIR /opt/mre
+
+ENV PORT=80
+ENV BASE_URL=http://csinvr.openode.io
 
 COPY package*.json ./
 RUN ["npm", "install", "--unsafe-perm"]
