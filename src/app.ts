@@ -30,7 +30,7 @@ export default class HelloWorld {
 	private animPos: MRE.Vector3 = MRE.Vector3.FromArray([-.7, 1.0, -0.1]);
 	private animScale: MRE.Vector3 = MRE.Vector3.FromArray([.4, .4, .4]);
 	private animRot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians);
-	private Q12Rot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -330 * MRE.DegreesToRadians);
+	private Q12Rot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -390 * MRE.DegreesToRadians);
 
 	private Q5Name = "IUMeetup5 > Enemy Dir Static";
 	private Q5ID = "artifact:1456732643608494774";
