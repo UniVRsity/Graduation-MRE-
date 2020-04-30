@@ -4,6 +4,7 @@
  */
 
 import * as MRE from '@microsoft/mixed-reality-extension-sdk';
+import { VRQuiz2 } from './anwserChoices';
 
 
 /**
@@ -77,7 +78,7 @@ export default class VRQuiz {
 	questionNumber = 0;
 	isAnwser = false;
 	currentQuestion = this.next;
-
+	private usersVoted: MRE.Guid[] = [MRE.ZeroGuid];
 
 
 	constructor(private context: MRE.Context, private baseUrl: string) {
@@ -138,7 +139,6 @@ export default class VRQuiz {
 				}
 			}
 		});
-
 		this.updateButtons();
 	}
 
@@ -198,25 +198,28 @@ export default class VRQuiz {
 		});
 
 		choice1ButtonBehavior.onClick(user => {
-			this.choice1Count++;
-			this.choice1.destroy();
-			this.choice1 = MRE.Actor.Create(this.context, {
-				actor: {
-					name: 'choice1',
-					transform: {
-						app: {
-							position: this.choice1Pos,
-							rotation: this.buttonRot
+			if (!this.usersVoted.includes(user.id)) {
+				this.usersVoted.push(user.id);
+				this.choice1Count++;
+				this.choice1.destroy();
+				this.choice1 = MRE.Actor.Create(this.context, {
+					actor: {
+						name: 'choice1',
+						transform: {
+							app: {
+								position: this.choice1Pos,
+								rotation: this.buttonRot
 							}
-					},
-					text: {
-						contents: this.choice1Count.toString(),
-						anchor: MRE.TextAnchorLocation.MiddleCenter,
-						color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
-						height: 0.3
+						},
+						text: {
+							contents: this.choice1Count.toString(),
+							anchor: MRE.TextAnchorLocation.MiddleCenter,
+							color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
+							height: 0.3
+						}
 					}
-				}
-			});
+				});
+			}
 		});
 
 

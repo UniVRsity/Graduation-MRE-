@@ -15,7 +15,7 @@ const MRE = __importStar(require("@microsoft/mixed-reality-extension-sdk"));
 /**
  * The main class of this app. All the logic goes here.
  */
-class VRQuiz {
+class VRQuiz2 {
     constructor(context, baseUrl) {
         this.context = context;
         this.baseUrl = baseUrl;
@@ -48,5 +48,5 @@ class VRQuiz {
         });
     }
 }
-exports.default = VRQuiz;
+exports.VRQuiz2 = VRQuiz2;
 //# sourceMappingURL=anwserChoices.js.map

@@ -6,7 +6,7 @@ import * as MRE from '@microsoft/mixed-reality-extension-sdk';
 /**
  * The main class of this app. All the logic goes here.
  */
-export default class VRQuiz {
+export declare class VRQuiz2 {
     private context;
     private baseUrl;
     private choice1Pos;

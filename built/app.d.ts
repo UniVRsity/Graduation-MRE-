@@ -62,6 +62,7 @@ export default class VRQuiz {
     questionNumber: number;
     isAnwser: boolean;
     currentQuestion: MRE.Actor;
+    private usersVoted;
     constructor(context: MRE.Context, baseUrl: string);
     /**
      * Once the context is "started", initialize the app.

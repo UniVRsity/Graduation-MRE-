@@ -72,6 +72,7 @@ class VRQuiz {
         this.questionNumber = 0;
         this.isAnwser = false;
         this.currentQuestion = this.next;
+        this.usersVoted = [MRE.ZeroGuid];
         this.context.onStarted(() => this.started());
     }
     /**
@@ -163,25 +164,28 @@ class VRQuiz {
             }
         });
         choice1ButtonBehavior.onClick(user => {
-            this.choice1Count++;
-            this.choice1.destroy();
-            this.choice1 = MRE.Actor.Create(this.context, {
-                actor: {
-                    name: 'choice1',
-                    transform: {
-                        app: {
-                            position: this.choice1Pos,
-                            rotation: this.buttonRot
+            if (!this.usersVoted.includes(user.id)) {
+                this.usersVoted.push(user.id);
+                this.choice1Count++;
+                this.choice1.destroy();
+                this.choice1 = MRE.Actor.Create(this.context, {
+                    actor: {
+                        name: 'choice1',
+                        transform: {
+                            app: {
+                                position: this.choice1Pos,
+                                rotation: this.buttonRot
+                            }
+                        },
+                        text: {
+                            contents: this.choice1Count.toString(),
+                            anchor: MRE.TextAnchorLocation.MiddleCenter,
+                            color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
+                            height: 0.3
                         }
-                    },
-                    text: {
-                        contents: this.choice1Count.toString(),
-                        anchor: MRE.TextAnchorLocation.MiddleCenter,
-                        color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
-                        height: 0.3
                     }
-                }
-            });
+                });
+            }
         });
     }
     //returns an MRE actor given the arguments below 
