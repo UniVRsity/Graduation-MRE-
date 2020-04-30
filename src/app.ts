@@ -5,10 +5,11 @@
 
 import * as MRE from '@microsoft/mixed-reality-extension-sdk';
 
+
 /**
  * The main class of this app. All the logic goes here.
  */
-export default class HelloWorld {
+export default class VRQuiz {
 	private next: MRE.Actor = null;
 	private previous: MRE.Actor = null;
 	private showAnwser: MRE.Actor = null;
@@ -16,21 +17,23 @@ export default class HelloWorld {
 	private start: MRE.Actor = null;
 	private light: MRE.Actor = null;
 
-	private anwserBackgroundPos: MRE.Vector3 = MRE.Vector3.FromArray([-1.75, 0.0, -0.2]);
-	private anwserPos: MRE.Vector3 = MRE.Vector3.FromArray([-1.75, 0.0, -0.1]);
-	private nextPos: MRE.Vector3 = MRE.Vector3.FromArray([-.4, 0.0, -0.1]);
-	private prevPos: MRE.Vector3 = MRE.Vector3.FromArray([0, 0.0, -0.1]);
-	private startPos: MRE.Vector3 = MRE.Vector3.FromArray([-.4, 0.0, -0.1]);
+	private anwserBackgroundPos: MRE.Vector3 = MRE.Vector3.FromArray([-1.75, -1, -0.2]);
+	private anwserPos: MRE.Vector3 = MRE.Vector3.FromArray([-1.75, -1, -0.1]);
+	private nextPos: MRE.Vector3 = MRE.Vector3.FromArray([-.4, -1, -0.1]);
+	private prevPos: MRE.Vector3 = MRE.Vector3.FromArray([0, -1, -0.1]);
+	private startPos: MRE.Vector3 = MRE.Vector3.FromArray([-.4, -1, -0.1]);
 
 	private buttonRot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians);
 
-
 	private buttonScale: MRE.Vector3 = MRE.Vector3.FromArray([0.08, 0.08, 0.08]);
 
-	private animPos: MRE.Vector3 = MRE.Vector3.FromArray([-.7, 1.0, -0.1]);
+	private animPos: MRE.Vector3 = MRE.Vector3.FromArray([-.7, 0, -0.1]);
 	private animScale: MRE.Vector3 = MRE.Vector3.FromArray([.4, .4, .4]);
 	private animRot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians);
-	private Q12Rot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -390 * MRE.DegreesToRadians);
+	private Q12Rot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -410 * MRE.DegreesToRadians);
+
+	private choice1Pos: MRE.Vector3 = new MRE.Vector3(-5, .5, -0.1);
+	private C1CubePos: MRE.Vector3 = new MRE.Vector3(-5, -.5, -0.1);
 
 	private Q5Name = "IUMeetup5 > Enemy Dir Static";
 	private Q5ID = "artifact:1456732643608494774";
@@ -64,6 +67,10 @@ export default class HelloWorld {
 	private Q6A: MRE.Actor = null;
 	private Q7A: MRE.Actor = null;
 	private Q8A: MRE.Actor = null;
+
+	private choice1: MRE.Actor = null;
+	private choice1Cube: MRE.Actor = null;
+	private choice1Count = 0;
 
 	private adminID: any = null;
 
@@ -114,16 +121,37 @@ export default class HelloWorld {
 		this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774",
 			this.animPos, this.animScale, this.Q12Rot);
 		this.currentQuestion = this.Q1;
-		this.updateQuestion();
+
+		this.choice1Cube = this.createKit('IUMeetup5 > Choice1', "artifact:1462468918881813077",
+			this.C1CubePos, this.animScale, this.buttonRot); 
+		this.choice1 = MRE.Actor.Create(this.context, {
+			actor: {
+				name: 'choice1',
+				transform: {
+					app: { position: this.choice1Pos }
+				},
+				text: {
+					contents: this.choice1Count.toString(),
+					anchor: MRE.TextAnchorLocation.MiddleCenter,
+					color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
+					height: 0.3
+				}
+			}
+		});
+
+		this.updateButtons();
 	}
 
 	//updates state based on user input 
-	private updateQuestion() {
+	private updateButtons() {
 
 		//make next, previous, and Anwser icon into button 
 		const nextButtonBehavior = this.next.setBehavior(MRE.ButtonBehavior);
 		const previousButtonBehavior = this.previous.setBehavior(MRE.ButtonBehavior);
 		const showAnwserButtonBehavior = this.showAnwser.setBehavior(MRE.ButtonBehavior);
+
+		const choice1ButtonBehavior = this.choice1Cube.setBehavior(MRE.ButtonBehavior);
+
 
 		//if previous is pressed subtract 1 to question number, set isAnwser to false, and update animation. 
 		nextButtonBehavior.onClick(user => {
@@ -155,22 +183,47 @@ export default class HelloWorld {
 				this.isAnwser = !this.isAnwser;
 				this.anwserBackground.destroy();
 				if (this.isAnwser) {
-					this.anwserBackground = this.createKit('Next Button > Anwser On Back', "artifact:1460401277274948054",
-						this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
+					this.anwserBackground = this.createKit('Next Button > Anwser On Back',
+						"artifact:1460401277274948054", this.anwserBackgroundPos,
+						this.buttonScale, this.buttonRot);
 				}
 				else {
-					this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205",
-						this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
+					this.anwserBackground = this.createKit('Next Button > Anwser Off Back',
+						"artifact:1460401277014901205", this.anwserBackgroundPos,
+						this.buttonScale, this.buttonRot);
 				}
 				this.currentQuestion.destroy();
 				this.updateAnim();
 			}
 		});
 
+		choice1ButtonBehavior.onClick(user => {
+			this.choice1Count++;
+			this.choice1.destroy();
+			this.choice1 = MRE.Actor.Create(this.context, {
+				actor: {
+					name: 'choice1',
+					transform: {
+						app: {
+							position: this.choice1Pos,
+							rotation: this.buttonRot
+							}
+					},
+					text: {
+						contents: this.choice1Count.toString(),
+						anchor: MRE.TextAnchorLocation.MiddleCenter,
+						color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
+						height: 0.3
+					}
+				}
+			});
+		});
+
 
 
 
 	}
+
 	//returns an MRE actor given the arguments below 
 	private createKit(name: string, artifactID: string, kitPos: MRE.Vector3,
 		kitScale: MRE.Vector3, kitRotation: MRE.Quaternion): MRE.Actor {

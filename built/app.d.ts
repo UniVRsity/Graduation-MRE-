@@ -6,7 +6,7 @@ import * as MRE from '@microsoft/mixed-reality-extension-sdk';
 /**
  * The main class of this app. All the logic goes here.
  */
-export default class HelloWorld {
+export default class VRQuiz {
     private context;
     private baseUrl;
     private next;
@@ -25,6 +25,9 @@ export default class HelloWorld {
     private animPos;
     private animScale;
     private animRot;
+    private Q12Rot;
+    private choice1Pos;
+    private C1CubePos;
     private Q5Name;
     private Q5ID;
     private Q5AName;
@@ -52,6 +55,10 @@ export default class HelloWorld {
     private Q6A;
     private Q7A;
     private Q8A;
+    private choice1;
+    private choice1Cube;
+    private choice1Count;
+    private adminID;
     questionNumber: number;
     isAnwser: boolean;
     currentQuestion: MRE.Actor;
@@ -61,7 +68,7 @@ export default class HelloWorld {
      */
     private started;
     private beginQuiz;
-    private updateQuestion;
+    private updateButtons;
     private createKit;
     private updateAnim;
 }

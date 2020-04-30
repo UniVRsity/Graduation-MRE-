@@ -15,8 +15,7 @@ const MRE = __importStar(require("@microsoft/mixed-reality-extension-sdk"));
 /**
  * The main class of this app. All the logic goes here.
  */
-//var currentQu: number = 0;
-class HelloWorld {
+class VRQuiz {
     constructor(context, baseUrl) {
         this.context = context;
         this.baseUrl = baseUrl;
@@ -26,16 +25,19 @@ class HelloWorld {
         this.anwserBackground = null;
         this.start = null;
         this.light = null;
-        this.anwserBackgroundPos = MRE.Vector3.FromArray([-1.75, 0.0, -0.2]);
-        this.anwserPos = MRE.Vector3.FromArray([-1.75, 0.0, -0.1]);
-        this.nextPos = MRE.Vector3.FromArray([-.4, 0.0, -0.1]);
-        this.prevPos = MRE.Vector3.FromArray([0, 0.0, -0.1]);
-        this.startPos = MRE.Vector3.FromArray([-.4, 0.0, -0.1]);
+        this.anwserBackgroundPos = MRE.Vector3.FromArray([-1.75, -1, -0.2]);
+        this.anwserPos = MRE.Vector3.FromArray([-1.75, -1, -0.1]);
+        this.nextPos = MRE.Vector3.FromArray([-.4, -1, -0.1]);
+        this.prevPos = MRE.Vector3.FromArray([0, -1, -0.1]);
+        this.startPos = MRE.Vector3.FromArray([-.4, -1, -0.1]);
         this.buttonRot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians);
         this.buttonScale = MRE.Vector3.FromArray([0.08, 0.08, 0.08]);
-        this.animPos = MRE.Vector3.FromArray([-.7, 1.0, -0.1]);
+        this.animPos = MRE.Vector3.FromArray([-.7, 0, -0.1]);
         this.animScale = MRE.Vector3.FromArray([.4, .4, .4]);
         this.animRot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians);
+        this.Q12Rot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -410 * MRE.DegreesToRadians);
+        this.choice1Pos = new MRE.Vector3(-5, .5, -0.1);
+        this.C1CubePos = new MRE.Vector3(-5, -.5, -0.1);
         this.Q5Name = "IUMeetup5 > Enemy Dir Static";
         this.Q5ID = "artifact:1456732643608494774";
         this.Q5AName = 'IUMeetup5 > Enemy Dir';
@@ -63,6 +65,10 @@ class HelloWorld {
         this.Q6A = null;
         this.Q7A = null;
         this.Q8A = null;
+        this.choice1 = null;
+        this.choice1Cube = null;
+        this.choice1Count = 0;
+        this.adminID = null;
         this.questionNumber = 0;
         this.isAnwser = false;
         this.currentQuestion = this.next;
@@ -77,11 +83,12 @@ class HelloWorld {
         //make start a button
         const startButtonBehavior = this.start.setBehavior(MRE.ButtonBehavior);
         // When clicked trigger quiz interface and put up first question 
-        startButtonBehavior.onClick(_ => {
+        startButtonBehavior.onClick(user => {
             this.start.destroy();
             //change question number to 1
             this.questionNumber++;
             this.beginQuiz();
+            this.adminID = user.id;
         });
     }
     beginQuiz() {
@@ -92,19 +99,35 @@ class HelloWorld {
         this.showAnwser = this.createKit('Next Button > Show Anwser', "artifact:1460403930600046846", this.anwserPos, this.buttonScale, this.buttonRot);
         this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
         //display first question animation by default 
-        this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774", this.animPos, this.animScale, this.animRot);
+        this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774", this.animPos, this.animScale, this.Q12Rot);
         this.currentQuestion = this.Q1;
-        this.updateQuestion();
+        this.choice1Cube = this.createKit('IUMeetup5 > Choice1', "artifact:1462468918881813077", this.C1CubePos, this.animScale, this.buttonRot);
+        this.choice1 = MRE.Actor.Create(this.context, {
+            actor: {
+                name: 'choice1',
+                transform: {
+                    app: { position: this.choice1Pos }
+                },
+                text: {
+                    contents: this.choice1Count.toString(),
+                    anchor: MRE.TextAnchorLocation.MiddleCenter,
+                    color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
+                    height: 0.3
+                }
+            }
+        });
+        this.updateButtons();
     }
     //updates state based on user input 
-    updateQuestion() {
+    updateButtons() {
         //make next, previous, and Anwser icon into button 
         const nextButtonBehavior = this.next.setBehavior(MRE.ButtonBehavior);
         const previousButtonBehavior = this.previous.setBehavior(MRE.ButtonBehavior);
         const showAnwserButtonBehavior = this.showAnwser.setBehavior(MRE.ButtonBehavior);
+        const choice1ButtonBehavior = this.choice1Cube.setBehavior(MRE.ButtonBehavior);
         //if previous is pressed subtract 1 to question number, set isAnwser to false, and update animation. 
-        nextButtonBehavior.onClick(_ => {
-            if (this.questionNumber < 7) {
+        nextButtonBehavior.onClick(user => {
+            if (this.questionNumber < 7 && user.id === this.adminID) {
                 this.isAnwser = false;
                 this.anwserBackground.destroy();
                 this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
@@ -114,8 +137,8 @@ class HelloWorld {
             }
         });
         //if previous is pressed, subtract 1 to question number, set isAnwser to false, and update animation. 
-        previousButtonBehavior.onClick(_ => {
-            if (this.questionNumber > 1) {
+        previousButtonBehavior.onClick(user => {
+            if (this.questionNumber > 1 && user.id === this.adminID) {
                 this.isAnwser = false;
                 this.anwserBackground.destroy();
                 this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
@@ -125,17 +148,40 @@ class HelloWorld {
             }
         });
         //if anwserOff is pressed destroy it and enable anwserOn icon and update the animation 
-        showAnwserButtonBehavior.onClick(_ => {
-            this.isAnwser = !this.isAnwser;
-            this.anwserBackground.destroy();
-            if (this.isAnwser) {
-                this.anwserBackground = this.createKit('Next Button > Anwser On Back', "artifact:1460401277274948054", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
+        showAnwserButtonBehavior.onClick(user => {
+            if (user.id === this.adminID) {
+                this.isAnwser = !this.isAnwser;
+                this.anwserBackground.destroy();
+                if (this.isAnwser) {
+                    this.anwserBackground = this.createKit('Next Button > Anwser On Back', "artifact:1460401277274948054", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
+                }
+                else {
+                    this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
+                }
+                this.currentQuestion.destroy();
+                this.updateAnim();
             }
-            else {
-                this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
-            }
-            this.currentQuestion.destroy();
-            this.updateAnim();
+        });
+        choice1ButtonBehavior.onClick(user => {
+            this.choice1Count++;
+            this.choice1.destroy();
+            this.choice1 = MRE.Actor.Create(this.context, {
+                actor: {
+                    name: 'choice1',
+                    transform: {
+                        app: {
+                            position: this.choice1Pos,
+                            rotation: this.buttonRot
+                        }
+                    },
+                    text: {
+                        contents: this.choice1Count.toString(),
+                        anchor: MRE.TextAnchorLocation.MiddleCenter,
+                        color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
+                        height: 0.3
+                    }
+                }
+            });
         });
     }
     //returns an MRE actor given the arguments below 
@@ -159,21 +205,21 @@ class HelloWorld {
         //if we are at question 1 and not looking for the anwser animation
         //display question 1 animation and update currentQuestion pointer
         if (this.questionNumber === 1 && !this.isAnwser) {
-            this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774", this.animPos, this.animScale, this.animRot);
+            this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774", this.animPos, this.animScale, this.Q12Rot);
             this.currentQuestion = this.Q1;
         }
         else if (this.questionNumber === 1 && this.isAnwser) {
-            this.Q1A = this.createKit('IUMeetup5 > Vector3anim', "artifact:1456639073140605316", this.animPos, this.animScale, this.animRot);
+            this.Q1A = this.createKit('IUMeetup5 > Vector3anim', "artifact:1456639073140605316", this.animPos, this.animScale, this.Q12Rot);
             this.currentQuestion = this.Q1A;
         }
         //if we are at question 2 and not looking for the anwser animation
         //display question 2 animation and update currentQuestion pointer
         else if (this.questionNumber === 2 && !this.isAnwser) {
-            this.Q2 = this.createKit('IUMeetup5 > Trans Static', "artifact:1461270206671224975", this.animPos, this.animScale, this.animRot);
+            this.Q2 = this.createKit('IUMeetup5 > Trans Static', "artifact:1461270206671224975", this.animPos, this.animScale, this.Q12Rot);
             this.currentQuestion = this.Q2;
         }
         else if (this.questionNumber === 2 && this.isAnwser) {
-            this.Q2A = this.createKit('IUMeetup5 > Trans Amin', "artifact:1456650296703844553", this.animPos, this.animScale, this.animRot);
+            this.Q2A = this.createKit('IUMeetup5 > Trans Amin', "artifact:1456650296703844553", this.animPos, this.animScale, this.Q12Rot);
             this.currentQuestion = this.Q2A;
         }
         else if (this.questionNumber === 3 && !this.isAnwser) {
@@ -215,5 +261,5 @@ class HelloWorld {
         //questions how do read data from database file
     }
 }
-exports.default = HelloWorld;
+exports.default = VRQuiz;
 //# sourceMappingURL=app.js.map
