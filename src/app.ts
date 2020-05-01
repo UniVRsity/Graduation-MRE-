@@ -34,15 +34,19 @@ export default class VRQuiz {
 	private Q12Rot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -410 * MRE.DegreesToRadians);
 
 	private C1TextPos: MRE.Vector3 = new MRE.Vector3(-4, .5, -0.1);
+	private ATextPos: MRE.Vector3 = new MRE.Vector3(-4, -.5, .2);
 	private C1ButtonPos: MRE.Vector3 = new MRE.Vector3(-4, -.5, -0.1);
 
 	private C2TextPos: MRE.Vector3 = new MRE.Vector3(-5, .5, -0.1);
+	private BTextPos: MRE.Vector3 = new MRE.Vector3(-5, -.5, .2);
 	private C2ButtonPos: MRE.Vector3 = new MRE.Vector3(-5, -.5, -0.1);
 
 	private C3TextPos: MRE.Vector3 = new MRE.Vector3(-6, .5, -0.1);
+	private CTextPos: MRE.Vector3 = new MRE.Vector3(-6, -.5, .2);
 	private C3ButtonPos: MRE.Vector3 = new MRE.Vector3(-6, -.5, -0.1);
 
 	private C4TextPos: MRE.Vector3 = new MRE.Vector3(-7, .5, -0.1);
+	private DTextPos: MRE.Vector3 = new MRE.Vector3(-7, -.5, .2);
 	private C4ButtonPos: MRE.Vector3 = new MRE.Vector3(-7, -.5, -0.1);
 
 
@@ -80,18 +84,22 @@ export default class VRQuiz {
 	private Q8A: MRE.Actor = null;
 
 	private choice1Text: MRE.Actor = null;
+	private AText: MRE.Actor = null;
 	private choice1Button: MRE.Actor = null;
 	private choice1Count = 0;
 
 	private choice2Text: MRE.Actor = null;
+	private BText: MRE.Actor = null;
 	private choice2Button: MRE.Actor = null;
 	private choice2Count = 0;
 
 	private choice3Text: MRE.Actor = null;
+	private CText: MRE.Actor = null;
 	private choice3Button: MRE.Actor = null;
 	private choice3Count = 0;
 
 	private choice4Text: MRE.Actor = null;
+	private DText: MRE.Actor = null;
 	private choice4Button: MRE.Actor = null;
 	private choice4Count = 0;
 
@@ -146,19 +154,23 @@ export default class VRQuiz {
 		this.currentQuestion = this.Q1;
 
 
-		this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
+		this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString()); 
+		this.AText = this.createText('Choice 1', this.ATextPos, "A");
 		this.choice1Button = this.createKit('IUMeetup5 > Choice 1', "artifact:1462468918881813077",
 			this.C1ButtonPos, this.animScale, this.buttonRot);
 
 		this.choice2Text = this.createText('choice 2', this.C2TextPos, this.choice1Count.toString());
+		this.BText = this.createText('Choice 2', this.BTextPos, "B");
 		this.choice2Button = this.createKit('IUMeetup5 > Choice1', "artifact:1462468918881813077",
 			this.C2ButtonPos, this.animScale, this.buttonRot);
 
 		this.choice3Text = this.createText('choice 3', this.C3TextPos, this.choice1Count.toString());
+		this.CText = this.createText('Choice 3', this.CTextPos, "C");
 		this.choice3Button = this.createKit('IUMeetup5 > Choice1', "artifact:1462468918881813077",
 			this.C3ButtonPos, this.animScale, this.buttonRot);
 
 		this.choice4Text = this.createText('choice 4', this.C4TextPos, this.choice1Count.toString());
+		this.DText = this.createText('Choice 4', this.DTextPos, "D");
 		this.choice4Button = this.createKit('IUMeetup5 > Choice1', "artifact:1462468918881813077",
 			this.C4ButtonPos, this.animScale, this.buttonRot);
 
