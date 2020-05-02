@@ -721,13 +721,13 @@
         "version": "153bc9bd224c1c6646bfa8f350ec1c260c71a0c4f03c250df4332b9a9802ad47",
         "signature": "153bc9bd224c1c6646bfa8f350ec1c260c71a0c4f03c250df4332b9a9802ad47"
       },
-      "./src/anwserchoices.ts": {
-        "version": "76210b5b1d620a0cfa19dab8ca20b67fe0da2615693e4df7caf05fbcb5926601",
-        "signature": "eae98c49449bad3243f5c7e17e1251d911c251e998d05523aba3e1e9f178902d"
+      "./src/creation.ts": {
+        "version": "54d9f1f30e996b4e40c551b17ae6b72760babd4c92d0ac7fd4579a52eed3d72d",
+        "signature": "04f8bf4ba463fc889326e7cf3b1822b1915297fa9adcce74a88e7e0838997e95"
       },
       "./src/app.ts": {
-        "version": "72d5905df4c4b8341e93243f5640a2d2e8f6cc7448676226d42f9acb410fc86b",
-        "signature": "2fbe1a246b020a5e0b57c8adc9333eb722858c056208003b2bd56216d957322c"
+        "version": "6a10550fec775f1ffd0ab1a238160a7f0cd8d8afa5e1abcefbe3193c87067f96",
+        "signature": "16d1ce2bd32e8d28d2edba075746e641fe7db3f67b5b9902505ece65e75ae069"
       },
       "./node_modules/@types/dotenv/index.d.ts": {
         "version": "9fe460fab563f49a7f51e7f5c38d5dd605a819fd6d0748df7ce5dc1a45eb896f",
@@ -1335,12 +1335,11 @@
         "./node_modules/@microsoft/mixed-reality-extension-sdk/built/user/index.d.ts",
         "./node_modules/@microsoft/mixed-reality-extension-sdk/built/util/index.d.ts"
       ],
-      "./src/anwserchoices.ts": [
+      "./src/creation.ts": [
         "./node_modules/@microsoft/mixed-reality-extension-sdk/built/index.d.ts"
       ],
       "./src/app.ts": [
-        "./node_modules/@microsoft/mixed-reality-extension-sdk/built/index.d.ts",
-        "./src/anwserchoices.ts"
+        "./node_modules/@microsoft/mixed-reality-extension-sdk/built/index.d.ts"
       ],
       "./node_modules/@types/dotenv/index.d.ts": [
         "./node_modules/@types/node/index.d.ts"
@@ -1922,7 +1921,7 @@
         "./node_modules/@microsoft/mixed-reality-extension-sdk/built/user/index.d.ts",
         "./node_modules/@microsoft/mixed-reality-extension-sdk/built/util/index.d.ts"
       ],
-      "./src/anwserchoices.ts": [
+      "./src/creation.ts": [
         "./node_modules/@microsoft/mixed-reality-extension-sdk/built/index.d.ts"
       ],
       "./src/app.ts": [
@@ -2113,7 +2112,7 @@
       "./node_modules/@microsoft/mixed-reality-extension-sdk/built/util/webhost.d.ts",
       "./node_modules/@microsoft/mixed-reality-extension-sdk/built/util/index.d.ts",
       "./node_modules/@microsoft/mixed-reality-extension-sdk/built/index.d.ts",
-      "./src/anwserchoices.ts",
+      "./src/creation.ts",
       "./node_modules/@types/dotenv/index.d.ts",
       "./src/server.ts",
       "./node_modules/@types/eslint-visitor-keys/index.d.ts",

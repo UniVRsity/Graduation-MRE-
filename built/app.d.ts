@@ -26,6 +26,11 @@ export default class VRQuiz {
     private animScale;
     private animRot;
     private Q12Rot;
+    private Q8Rot;
+    private Q8Scale;
+    private Q9Rot;
+    private Q9Scale;
+    private Q9Pos;
     private C1TextPos;
     private ATextPos;
     private C1ButtonPos;
@@ -48,6 +53,18 @@ export default class VRQuiz {
     private Q6AID;
     private Q7Name;
     private Q7ID;
+    private Q8Name;
+    private Q8ID;
+    private Q8AName;
+    private Q8AID;
+    private Q9Name;
+    private Q9ID;
+    private Q9AName;
+    private Q9AID;
+    private Q10Name;
+    private Q10ID;
+    private Q10AName;
+    private Q10AID;
     private temp;
     private Q1;
     private Q2;
@@ -57,6 +74,8 @@ export default class VRQuiz {
     private Q6;
     private Q7;
     private Q8;
+    private Q9;
+    private Q10;
     private Q1A;
     private Q2A;
     private Q3A;
@@ -65,6 +84,8 @@ export default class VRQuiz {
     private Q6A;
     private Q7A;
     private Q8A;
+    private Q9A;
+    private Q10A;
     private choice1Text;
     private AText;
     private choice1Button;
@@ -82,6 +103,7 @@ export default class VRQuiz {
     private choice4Button;
     private choice4Count;
     private adminID;
+    private stopVotes;
     questionNumber: number;
     isAnwser: boolean;
     currentQuestion: MRE.Actor;

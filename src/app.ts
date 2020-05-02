@@ -4,7 +4,7 @@
  */
 
 import * as MRE from '@microsoft/mixed-reality-extension-sdk';
-import { VRQuiz2 } from './anwserChoices';
+//import { VRQuiz2 } from './anwserChoices';
 
 
 /**
@@ -32,6 +32,11 @@ export default class VRQuiz {
 	private animScale: MRE.Vector3 = MRE.Vector3.FromArray([.4, .4, .4]);
 	private animRot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians);
 	private Q12Rot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -410 * MRE.DegreesToRadians);
+	private Q8Rot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -60 * MRE.DegreesToRadians); 
+	private Q8Scale: MRE.Vector3 = MRE.Vector3.FromArray([.3, .3, .3]);
+	private Q9Rot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -87 * MRE.DegreesToRadians);
+	private Q9Scale: MRE.Vector3 = new MRE.Vector3(1.1, 1.1, 1.1);
+	private Q9Pos: MRE.Vector3 = new MRE.Vector3(1, .4, -0.1);
 
 	private C1TextPos: MRE.Vector3 = new MRE.Vector3(-4, .5, -0.1);
 	private ATextPos: MRE.Vector3 = new MRE.Vector3(-4, -.5, .2);
@@ -63,6 +68,21 @@ export default class VRQuiz {
 	private Q7Name = "IUMeetup5 > E Speed Sol";
 	private Q7ID = "artifact:1456774319068676825";
 
+	private Q8Name = "Vectors > Form Vect Stat";
+	private Q8ID = "artifact:1463303124692239168";
+	private Q8AName = "Vectors > Form Vect Anim";
+	private Q8AID = "artifact:1463303124952286017";
+
+	private Q9Name = "Vectors > Vel Static";
+	private Q9ID = "artifact:1463303125606597443";
+	private Q9AName = "Vectors > Vel Anim";
+	private Q9AID = "artifact:1463303124432192319";
+
+	private Q10Name = "Vectors > 3 D Mag Stat";
+	private Q10ID = "artifact:1463303125346550594";
+	private Q10AName = "Vectors > 3 D Mag Anim";
+	private Q10AID = "artifact:1463272035898622891";
+
 	private temp: MRE.Actor = null;
 
 	private Q1: MRE.Actor = null;
@@ -73,6 +93,8 @@ export default class VRQuiz {
 	private Q6: MRE.Actor = null;
 	private Q7: MRE.Actor = null;
 	private Q8: MRE.Actor = null;
+	private Q9: MRE.Actor = null;
+	private Q10: MRE.Actor = null;
 
 	private Q1A: MRE.Actor = null;
 	private Q2A: MRE.Actor = null;
@@ -82,6 +104,8 @@ export default class VRQuiz {
 	private Q6A: MRE.Actor = null;
 	private Q7A: MRE.Actor = null;
 	private Q8A: MRE.Actor = null;
+	private Q9A: MRE.Actor = null;
+	private Q10A: MRE.Actor = null;
 
 	private choice1Text: MRE.Actor = null;
 	private AText: MRE.Actor = null;
@@ -104,7 +128,8 @@ export default class VRQuiz {
 	private choice4Count = 0;
 
 	private adminID: any = null;
-
+	
+	private stopVotes = false;
 	questionNumber = 0;
 	isAnwser = false;
 	currentQuestion = this.next;
@@ -154,10 +179,12 @@ export default class VRQuiz {
 		this.currentQuestion = this.Q1;
 
 
-		this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString()); 
+		this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
 		this.AText = this.createText('Choice 1', this.ATextPos, "A");
+		//this.choice1Text.appearance.material.color = MRE.Color4.FromColor3(MRE.Color3.Green(), 4);
 		this.choice1Button = this.createKit('IUMeetup5 > Choice 1', "artifact:1462468918881813077",
 			this.C1ButtonPos, this.animScale, this.buttonRot);
+		
 
 		this.choice2Text = this.createText('choice 2', this.C2TextPos, this.choice1Count.toString());
 		this.BText = this.createText('Choice 2', this.BTextPos, "B");
@@ -190,8 +217,9 @@ export default class VRQuiz {
 		//if previous is pressed subtract 1 to question number, set isAnwser to false, and update animation,
 		//and reset the choices count
 		nextButtonBehavior.onClick(user => {
-			if (this.questionNumber < 7 && user.id === this.adminID) {
+			if (this.questionNumber < 10 && user.id === this.adminID) {
 				this.resetChoices();
+				this.stopVotes = false; 
 				this.isAnwser = false;
 				this.anwserBackground.destroy();
 				this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205",
@@ -243,7 +271,11 @@ export default class VRQuiz {
 		const choice4ButtonBehavior = this.choice4Button.setBehavior(MRE.ButtonBehavior);
 
 		choice1ButtonBehavior.onClick(user => {
-			if (!this.usersVoted.includes(user.id)) {
+			if (user.id === this.adminID && !this.stopVotes) {
+				this.choice1Text.text.color = new MRE.Color3(0, 1, 0);
+				this.stopVotes = true;
+			}
+			if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
 				this.usersVoted.push(user.id);
 				this.choice1Count++;
 				this.choice1Text.destroy();
@@ -251,7 +283,11 @@ export default class VRQuiz {
 			}
 		});
 		choice2ButtonBehavior.onClick(user => {
-			if (!this.usersVoted.includes(user.id)) {
+			if (user.id === this.adminID && !this.stopVotes) {
+				this.choice2Text.text.color = new MRE.Color3(0, 1, 0);
+				this.stopVotes = true;
+			}
+			if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
 				this.usersVoted.push(user.id);
 				this.choice2Count++;
 				this.choice2Text.destroy();
@@ -260,7 +296,11 @@ export default class VRQuiz {
 		});
 
 		choice3ButtonBehavior.onClick(user => {
-			if (!this.usersVoted.includes(user.id)) {
+			if (user.id === this.adminID && !this.stopVotes) {
+				this.choice3Text.text.color = new MRE.Color3(0, 1, 0);
+				this.stopVotes = true;
+			}
+			if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
 				this.usersVoted.push(user.id);
 				this.choice3Count++;
 				this.choice3Text.destroy();
@@ -269,7 +309,11 @@ export default class VRQuiz {
 		});
 
 		choice4ButtonBehavior.onClick(user => {
-			if (!this.usersVoted.includes(user.id)) {
+			if (user.id === this.adminID && !this.stopVotes) {
+				this.choice4Text.text.color = new MRE.Color3(0, 1, 0);
+				this.stopVotes = true;
+			}
+			if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
 				this.usersVoted.push(user.id);
 				this.choice4Count++;
 				this.choice4Text.destroy();
@@ -279,8 +323,8 @@ export default class VRQuiz {
 
 	}
 
-		
-	
+
+
 
 	//want to set all the counters for the choices to zero and reset the user voters list 
 	private resetChoices() {
@@ -345,81 +389,112 @@ export default class VRQuiz {
 
 
 	private updateAnim() {
+		
+		if (this.questionNumber === 1 && !this.isAnwser) {
+			this.Q8 = this.createKit(this.Q8Name, this.Q8ID,
+				this.animPos, this.Q8Scale, this.Q8Rot);
+			this.currentQuestion = this.Q8;
+		}
+		else if (this.questionNumber === 1 && this.isAnwser) {
+			this.Q8A = this.createKit(this.Q8AName, this.Q8AID,
+				this.animPos, this.Q8Scale, this.Q8Rot);
+			this.currentQuestion = this.Q8A;
+		}
+		else if (this.questionNumber === 2 && !this.isAnwser) {
+			this.Q9 = this.createKit(this.Q9Name, this.Q9ID,
+				this.Q9Pos, this.Q9Scale, this.Q9Rot);
+			this.currentQuestion = this.Q9;
+		}
+		else if (this.questionNumber === 2 && this.isAnwser) {
+			this.Q9A = this.createKit(this.Q9AName, this.Q9AID,
+				this.Q9Pos, this.Q9Scale, this.Q9Rot);
+			this.currentQuestion = this.Q9A;
+		}
+		else if (this.questionNumber === 3 && !this.isAnwser) {
+			this.Q10 = this.createKit(this.Q10Name, this.Q10ID,
+				this.animPos, this.Q8Scale, this.Q8Rot);
+			this.currentQuestion = this.Q10;
+		}
+		else if (this.questionNumber === 3 && this.isAnwser) {
+			this.Q10A = this.createKit(this.Q10AName, this.Q10AID,
+				this.animPos, this.Q8Scale, this.Q8Rot);
+			this.currentQuestion = this.Q10A;
+		}
 		//if we are at question 1 and not looking for the anwser animation
 		//display question 1 animation and update currentQuestion pointer
-		if (this.questionNumber === 1 && !this.isAnwser) {
+		if (this.questionNumber === 4 && !this.isAnwser) {
 			this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774",
 				this.animPos, this.animScale, this.Q12Rot);
 			this.currentQuestion = this.Q1;
 		}
-		else if (this.questionNumber === 1 && this.isAnwser) {
+		else if (this.questionNumber === 4 && this.isAnwser) {
 			this.Q1A = this.createKit('IUMeetup5 > Vector3anim', "artifact:1456639073140605316",
 				this.animPos, this.animScale, this.Q12Rot);
 			this.currentQuestion = this.Q1A;
 		}
 		//if we are at question 2 and not looking for the anwser animation
 		//display question 2 animation and update currentQuestion pointer
-		else if (this.questionNumber === 2 && !this.isAnwser) {
+		if (this.questionNumber === 5 && !this.isAnwser) {
 			this.Q2 = this.createKit('IUMeetup5 > Trans Static', "artifact:1461270206671224975",
 				this.animPos, this.animScale, this.Q12Rot);
 			this.currentQuestion = this.Q2;
 		}
 
-		else if (this.questionNumber === 2 && this.isAnwser) {
+		else if (this.questionNumber === 5 && this.isAnwser) {
 			this.Q2A = this.createKit('IUMeetup5 > Trans Amin', "artifact:1456650296703844553",
 				this.animPos, this.animScale, this.Q12Rot);
 			this.currentQuestion = this.Q2A;
 		}
 
-		else if (this.questionNumber === 3 && !this.isAnwser) {
+		if (this.questionNumber === 6 && !this.isAnwser) {
 			this.Q3 = this.createKit('IUMeetup5 > Prefab Static', "artifact:1456774319194505946",
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q3;
 		}
 
-		else if (this.questionNumber === 3 && this.isAnwser) {
+		else if (this.questionNumber === 6 && this.isAnwser) {
 			this.Q3A = this.createKit('IUMeetup5 > Prefab Anim', "artifact:1456782914212593752",
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q3A;
 		}
 
-		else if (this.questionNumber === 4 && !this.isAnwser) {
+
+		if (this.questionNumber === 7 && !this.isAnwser) {
 			this.Q4 = this.createKit('IUMeetup5 > Instance Static', "artifact:1456872393480864276",
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q4;
 		}
-		else if (this.questionNumber === 4 && this.isAnwser) {
+		else if (this.questionNumber === 7 && this.isAnwser) {
 			this.Q4A = this.createKit('IUMeetup5 > Instance Anim', "artifact:1456872393740911125",
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q4A;
 		}
-		else if (this.questionNumber === 5 && !this.isAnwser) {
+		else if (this.questionNumber === 8 && !this.isAnwser) {
 			this.Q5 = this.createKit(this.Q5Name, this.Q5ID,
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q5;
 		}
-		else if (this.questionNumber === 5 && this.isAnwser) {
+		else if (this.questionNumber === 8 && this.isAnwser) {
 			this.Q5A = this.createKit(this.Q5AName, this.Q5AID,
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q5A;
 		}
-		else if (this.questionNumber === 6 && !this.isAnwser) {
+		else if (this.questionNumber === 9 && !this.isAnwser) {
 			this.Q6 = this.createKit(this.Q6Name, this.Q6ID,
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q6;
 		}
-		else if (this.questionNumber === 6 && this.isAnwser) {
+		else if (this.questionNumber === 9 && this.isAnwser) {
 			this.Q6A = this.createKit(this.Q6AName, this.Q6AID,
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q6A;
 		}
-		else if (this.questionNumber === 7 && !this.isAnwser) {
+		else if (this.questionNumber === 10 && !this.isAnwser) {
 			this.Q7 = this.createKit(this.Q7Name, this.Q7ID,
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q7;
 		}
-
-		//questions how do read data from database file
-
+		
 	}
 }
+		//questions how do read data from database file

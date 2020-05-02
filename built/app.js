@@ -12,6 +12,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const MRE = __importStar(require("@microsoft/mixed-reality-extension-sdk"));
+//import { VRQuiz2 } from './anwserChoices';
 /**
  * The main class of this app. All the logic goes here.
  */
@@ -36,6 +37,11 @@ class VRQuiz {
         this.animScale = MRE.Vector3.FromArray([.4, .4, .4]);
         this.animRot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians);
         this.Q12Rot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -410 * MRE.DegreesToRadians);
+        this.Q8Rot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -60 * MRE.DegreesToRadians);
+        this.Q8Scale = MRE.Vector3.FromArray([.3, .3, .3]);
+        this.Q9Rot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -87 * MRE.DegreesToRadians);
+        this.Q9Scale = new MRE.Vector3(1.1, 1.1, 1.1);
+        this.Q9Pos = new MRE.Vector3(1, .4, -0.1);
         this.C1TextPos = new MRE.Vector3(-4, .5, -0.1);
         this.ATextPos = new MRE.Vector3(-4, -.5, .2);
         this.C1ButtonPos = new MRE.Vector3(-4, -.5, -0.1);
@@ -58,6 +64,18 @@ class VRQuiz {
         this.Q6AID = "artifact:1456755778072347000";
         this.Q7Name = "IUMeetup5 > E Speed Sol";
         this.Q7ID = "artifact:1456774319068676825";
+        this.Q8Name = "Vectors > Form Vect Stat";
+        this.Q8ID = "artifact:1463303124692239168";
+        this.Q8AName = "Vectors > Form Vect Anim";
+        this.Q8AID = "artifact:1463303124952286017";
+        this.Q9Name = "Vectors > Vel Static";
+        this.Q9ID = "artifact:1463303125606597443";
+        this.Q9AName = "Vectors > Vel Anim";
+        this.Q9AID = "artifact:1463303124432192319";
+        this.Q10Name = "Vectors > 3 D Mag Stat";
+        this.Q10ID = "artifact:1463303125346550594";
+        this.Q10AName = "Vectors > 3 D Mag Anim";
+        this.Q10AID = "artifact:1463272035898622891";
         this.temp = null;
         this.Q1 = null;
         this.Q2 = null;
@@ -67,6 +85,8 @@ class VRQuiz {
         this.Q6 = null;
         this.Q7 = null;
         this.Q8 = null;
+        this.Q9 = null;
+        this.Q10 = null;
         this.Q1A = null;
         this.Q2A = null;
         this.Q3A = null;
@@ -75,6 +95,8 @@ class VRQuiz {
         this.Q6A = null;
         this.Q7A = null;
         this.Q8A = null;
+        this.Q9A = null;
+        this.Q10A = null;
         this.choice1Text = null;
         this.AText = null;
         this.choice1Button = null;
@@ -92,6 +114,7 @@ class VRQuiz {
         this.choice4Button = null;
         this.choice4Count = 0;
         this.adminID = null;
+        this.stopVotes = false;
         this.questionNumber = 0;
         this.isAnwser = false;
         this.currentQuestion = this.next;
@@ -127,6 +150,7 @@ class VRQuiz {
         this.currentQuestion = this.Q1;
         this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
         this.AText = this.createText('Choice 1', this.ATextPos, "A");
+        //this.choice1Text.appearance.material.color = MRE.Color4.FromColor3(MRE.Color3.Green(), 4);
         this.choice1Button = this.createKit('IUMeetup5 > Choice 1', "artifact:1462468918881813077", this.C1ButtonPos, this.animScale, this.buttonRot);
         this.choice2Text = this.createText('choice 2', this.C2TextPos, this.choice1Count.toString());
         this.BText = this.createText('Choice 2', this.BTextPos, "B");
@@ -149,8 +173,9 @@ class VRQuiz {
         //if previous is pressed subtract 1 to question number, set isAnwser to false, and update animation,
         //and reset the choices count
         nextButtonBehavior.onClick(user => {
-            if (this.questionNumber < 7 && user.id === this.adminID) {
+            if (this.questionNumber < 10 && user.id === this.adminID) {
                 this.resetChoices();
+                this.stopVotes = false;
                 this.isAnwser = false;
                 this.anwserBackground.destroy();
                 this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
@@ -194,7 +219,11 @@ class VRQuiz {
         const choice3ButtonBehavior = this.choice3Button.setBehavior(MRE.ButtonBehavior);
         const choice4ButtonBehavior = this.choice4Button.setBehavior(MRE.ButtonBehavior);
         choice1ButtonBehavior.onClick(user => {
-            if (!this.usersVoted.includes(user.id)) {
+            if (user.id === this.adminID && !this.stopVotes) {
+                this.choice1Text.text.color = new MRE.Color3(0, 1, 0);
+                this.stopVotes = true;
+            }
+            if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
                 this.usersVoted.push(user.id);
                 this.choice1Count++;
                 this.choice1Text.destroy();
@@ -202,7 +231,11 @@ class VRQuiz {
             }
         });
         choice2ButtonBehavior.onClick(user => {
-            if (!this.usersVoted.includes(user.id)) {
+            if (user.id === this.adminID && !this.stopVotes) {
+                this.choice2Text.text.color = new MRE.Color3(0, 1, 0);
+                this.stopVotes = true;
+            }
+            if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
                 this.usersVoted.push(user.id);
                 this.choice2Count++;
                 this.choice2Text.destroy();
@@ -210,7 +243,11 @@ class VRQuiz {
             }
         });
         choice3ButtonBehavior.onClick(user => {
-            if (!this.usersVoted.includes(user.id)) {
+            if (user.id === this.adminID && !this.stopVotes) {
+                this.choice3Text.text.color = new MRE.Color3(0, 1, 0);
+                this.stopVotes = true;
+            }
+            if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
                 this.usersVoted.push(user.id);
                 this.choice3Count++;
                 this.choice3Text.destroy();
@@ -218,7 +255,11 @@ class VRQuiz {
             }
         });
         choice4ButtonBehavior.onClick(user => {
-            if (!this.usersVoted.includes(user.id)) {
+            if (user.id === this.adminID && !this.stopVotes) {
+                this.choice4Text.text.color = new MRE.Color3(0, 1, 0);
+                this.stopVotes = true;
+            }
+            if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
                 this.usersVoted.push(user.id);
                 this.choice4Count++;
                 this.choice4Text.destroy();
@@ -281,35 +322,31 @@ class VRQuiz {
         return this.temp;
     }
     updateAnim() {
-        //if we are at question 1 and not looking for the anwser animation
-        //display question 1 animation and update currentQuestion pointer
         if (this.questionNumber === 1 && !this.isAnwser) {
-            this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774", this.animPos, this.animScale, this.Q12Rot);
-            this.currentQuestion = this.Q1;
+            this.Q8 = this.createKit(this.Q8Name, this.Q8ID, this.animPos, this.Q8Scale, this.Q8Rot);
+            this.currentQuestion = this.Q8;
         }
         else if (this.questionNumber === 1 && this.isAnwser) {
-            this.Q1A = this.createKit('IUMeetup5 > Vector3anim', "artifact:1456639073140605316", this.animPos, this.animScale, this.Q12Rot);
-            this.currentQuestion = this.Q1A;
+            this.Q8A = this.createKit(this.Q8AName, this.Q8AID, this.animPos, this.Q8Scale, this.Q8Rot);
+            this.currentQuestion = this.Q8A;
         }
-        //if we are at question 2 and not looking for the anwser animation
-        //display question 2 animation and update currentQuestion pointer
         else if (this.questionNumber === 2 && !this.isAnwser) {
-            this.Q2 = this.createKit('IUMeetup5 > Trans Static', "artifact:1461270206671224975", this.animPos, this.animScale, this.Q12Rot);
-            this.currentQuestion = this.Q2;
+            this.Q9 = this.createKit(this.Q9Name, this.Q9ID, this.Q9Pos, this.Q9Scale, this.Q9Rot);
+            this.currentQuestion = this.Q9;
         }
         else if (this.questionNumber === 2 && this.isAnwser) {
-            this.Q2A = this.createKit('IUMeetup5 > Trans Amin', "artifact:1456650296703844553", this.animPos, this.animScale, this.Q12Rot);
-            this.currentQuestion = this.Q2A;
+            this.Q9A = this.createKit(this.Q9AName, this.Q9AID, this.Q9Pos, this.Q9Scale, this.Q9Rot);
+            this.currentQuestion = this.Q9A;
         }
         else if (this.questionNumber === 3 && !this.isAnwser) {
-            this.Q3 = this.createKit('IUMeetup5 > Prefab Static', "artifact:1456774319194505946", this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q3;
+            this.Q10 = this.createKit(this.Q10Name, this.Q10ID, this.animPos, this.Q8Scale, this.Q8Rot);
+            this.currentQuestion = this.Q10;
         }
         else if (this.questionNumber === 3 && this.isAnwser) {
-            this.Q3A = this.createKit('IUMeetup5 > Prefab Anim', "artifact:1456782914212593752", this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q3A;
+            this.Q10A = this.createKit(this.Q10AName, this.Q10AID, this.animPos, this.Q8Scale, this.Q8Rot);
+            this.currentQuestion = this.Q10A;
         }
-        else if (this.questionNumber === 4 && !this.isAnwser) {
+        if (this.questionNumber === 4 && !this.isAnwser) {
             this.Q4 = this.createKit('IUMeetup5 > Instance Static', "artifact:1456872393480864276", this.animPos, this.animScale, this.animRot);
             this.currentQuestion = this.Q4;
         }
@@ -337,8 +374,36 @@ class VRQuiz {
             this.Q7 = this.createKit(this.Q7Name, this.Q7ID, this.animPos, this.animScale, this.animRot);
             this.currentQuestion = this.Q7;
         }
-        //questions how do read data from database file
+        //if we are at question 1 and not looking for the anwser animation
+        //display question 1 animation and update currentQuestion pointer
+        if (this.questionNumber === 8 && !this.isAnwser) {
+            this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774", this.animPos, this.animScale, this.Q12Rot);
+            this.currentQuestion = this.Q1;
+        }
+        else if (this.questionNumber === 8 && this.isAnwser) {
+            this.Q1A = this.createKit('IUMeetup5 > Vector3anim', "artifact:1456639073140605316", this.animPos, this.animScale, this.Q12Rot);
+            this.currentQuestion = this.Q1A;
+        }
+        //if we are at question 2 and not looking for the anwser animation
+        //display question 2 animation and update currentQuestion pointer
+        if (this.questionNumber === 9 && !this.isAnwser) {
+            this.Q2 = this.createKit('IUMeetup5 > Trans Static', "artifact:1461270206671224975", this.animPos, this.animScale, this.Q12Rot);
+            this.currentQuestion = this.Q2;
+        }
+        else if (this.questionNumber === 9 && this.isAnwser) {
+            this.Q2A = this.createKit('IUMeetup5 > Trans Amin', "artifact:1456650296703844553", this.animPos, this.animScale, this.Q12Rot);
+            this.currentQuestion = this.Q2A;
+        }
+        if (this.questionNumber === 10 && !this.isAnwser) {
+            this.Q3 = this.createKit('IUMeetup5 > Prefab Static', "artifact:1456774319194505946", this.animPos, this.animScale, this.animRot);
+            this.currentQuestion = this.Q3;
+        }
+        else if (this.questionNumber === 10 && this.isAnwser) {
+            this.Q3A = this.createKit('IUMeetup5 > Prefab Anim', "artifact:1456782914212593752", this.animPos, this.animScale, this.animRot);
+            this.currentQuestion = this.Q3A;
+        }
     }
 }
 exports.default = VRQuiz;
+//questions how do read data from database file
 //# sourceMappingURL=app.js.map
