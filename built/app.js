@@ -146,8 +146,8 @@ class VRQuiz {
         this.showAnwser = this.createKit('Next Button > Show Anwser', "artifact:1460403930600046846", this.anwserPos, this.buttonScale, this.buttonRot);
         this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
         //display first question animation by default 
-        this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774", this.animPos, this.animScale, this.Q12Rot);
-        this.currentQuestion = this.Q1;
+        this.Q8 = this.createKit(this.Q8Name, this.Q8ID, this.animPos, this.Q8Scale, this.Q8Rot);
+        this.currentQuestion = this.Q8;
         this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
         this.AText = this.createText('Choice 1', this.ATextPos, "A");
         //this.choice1Text.appearance.material.color = MRE.Color4.FromColor3(MRE.Color3.Green(), 4);
@@ -186,7 +186,7 @@ class VRQuiz {
         });
         //if previous is pressed, subtract 1 to question number, set isAnwser to false, and update animation. 
         previousButtonBehavior.onClick(user => {
-            if (this.questionNumber > 1 && user.id === this.adminID) {
+            if (this.questionNumber > 0 && user.id === this.adminID) {
                 this.resetChoices();
                 this.isAnwser = false;
                 this.anwserBackground.destroy();
@@ -220,50 +220,54 @@ class VRQuiz {
         const choice4ButtonBehavior = this.choice4Button.setBehavior(MRE.ButtonBehavior);
         choice1ButtonBehavior.onClick(user => {
             if (user.id === this.adminID && !this.stopVotes) {
-                this.choice1Text.text.color = new MRE.Color3(0, 1, 0);
                 this.stopVotes = true;
+                this.choice1Count++;
+                this.choice1Text.destroy();
+                this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
+                this.choice1Text.text.color = new MRE.Color3(0, 1, 0);
             }
             if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
                 this.usersVoted.push(user.id);
                 this.choice1Count++;
-                this.choice1Text.destroy();
-                this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
             }
         });
         choice2ButtonBehavior.onClick(user => {
             if (user.id === this.adminID && !this.stopVotes) {
+                this.choice2Count++;
+                this.choice2Text.destroy();
+                this.choice2Text = this.createText('choice 2', this.C2TextPos, this.choice2Count.toString());
                 this.choice2Text.text.color = new MRE.Color3(0, 1, 0);
                 this.stopVotes = true;
             }
             if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
                 this.usersVoted.push(user.id);
                 this.choice2Count++;
-                this.choice2Text.destroy();
-                this.choice2Text = this.createText('choice 2', this.C2TextPos, this.choice2Count.toString());
             }
         });
         choice3ButtonBehavior.onClick(user => {
             if (user.id === this.adminID && !this.stopVotes) {
+                this.choice3Count++;
+                this.choice3Text.destroy();
+                this.choice3Text = this.createText('choice 3', this.C3TextPos, this.choice3Count.toString());
                 this.choice3Text.text.color = new MRE.Color3(0, 1, 0);
                 this.stopVotes = true;
             }
             if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
                 this.usersVoted.push(user.id);
                 this.choice3Count++;
-                this.choice3Text.destroy();
-                this.choice3Text = this.createText('choice 3', this.C3TextPos, this.choice3Count.toString());
             }
         });
         choice4ButtonBehavior.onClick(user => {
             if (user.id === this.adminID && !this.stopVotes) {
+                this.choice4Count++;
+                this.choice4Text.destroy();
+                this.choice4Text = this.createText('choice 4', this.C4TextPos, this.choice4Count.toString());
                 this.choice4Text.text.color = new MRE.Color3(0, 1, 0);
                 this.stopVotes = true;
             }
             if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
                 this.usersVoted.push(user.id);
                 this.choice4Count++;
-                this.choice4Text.destroy();
-                this.choice4Text = this.createText('choice 4', this.C4TextPos, this.choice4Count.toString());
             }
         });
     }
@@ -346,61 +350,61 @@ class VRQuiz {
             this.Q10A = this.createKit(this.Q10AName, this.Q10AID, this.animPos, this.Q8Scale, this.Q8Rot);
             this.currentQuestion = this.Q10A;
         }
-        if (this.questionNumber === 4 && !this.isAnwser) {
-            this.Q4 = this.createKit('IUMeetup5 > Instance Static', "artifact:1456872393480864276", this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q4;
-        }
-        else if (this.questionNumber === 4 && this.isAnwser) {
-            this.Q4A = this.createKit('IUMeetup5 > Instance Anim', "artifact:1456872393740911125", this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q4A;
-        }
-        else if (this.questionNumber === 5 && !this.isAnwser) {
-            this.Q5 = this.createKit(this.Q5Name, this.Q5ID, this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q5;
-        }
-        else if (this.questionNumber === 5 && this.isAnwser) {
-            this.Q5A = this.createKit(this.Q5AName, this.Q5AID, this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q5A;
-        }
-        else if (this.questionNumber === 6 && !this.isAnwser) {
-            this.Q6 = this.createKit(this.Q6Name, this.Q6ID, this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q6;
-        }
-        else if (this.questionNumber === 6 && this.isAnwser) {
-            this.Q6A = this.createKit(this.Q6AName, this.Q6AID, this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q6A;
-        }
-        else if (this.questionNumber === 7 && !this.isAnwser) {
-            this.Q7 = this.createKit(this.Q7Name, this.Q7ID, this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q7;
-        }
         //if we are at question 1 and not looking for the anwser animation
         //display question 1 animation and update currentQuestion pointer
-        if (this.questionNumber === 8 && !this.isAnwser) {
+        if (this.questionNumber === 4 && !this.isAnwser) {
             this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774", this.animPos, this.animScale, this.Q12Rot);
             this.currentQuestion = this.Q1;
         }
-        else if (this.questionNumber === 8 && this.isAnwser) {
+        else if (this.questionNumber === 4 && this.isAnwser) {
             this.Q1A = this.createKit('IUMeetup5 > Vector3anim', "artifact:1456639073140605316", this.animPos, this.animScale, this.Q12Rot);
             this.currentQuestion = this.Q1A;
         }
         //if we are at question 2 and not looking for the anwser animation
         //display question 2 animation and update currentQuestion pointer
-        if (this.questionNumber === 9 && !this.isAnwser) {
+        if (this.questionNumber === 5 && !this.isAnwser) {
             this.Q2 = this.createKit('IUMeetup5 > Trans Static', "artifact:1461270206671224975", this.animPos, this.animScale, this.Q12Rot);
             this.currentQuestion = this.Q2;
         }
-        else if (this.questionNumber === 9 && this.isAnwser) {
+        else if (this.questionNumber === 5 && this.isAnwser) {
             this.Q2A = this.createKit('IUMeetup5 > Trans Amin', "artifact:1456650296703844553", this.animPos, this.animScale, this.Q12Rot);
             this.currentQuestion = this.Q2A;
         }
-        if (this.questionNumber === 10 && !this.isAnwser) {
+        if (this.questionNumber === 6 && !this.isAnwser) {
             this.Q3 = this.createKit('IUMeetup5 > Prefab Static', "artifact:1456774319194505946", this.animPos, this.animScale, this.animRot);
             this.currentQuestion = this.Q3;
         }
-        else if (this.questionNumber === 10 && this.isAnwser) {
+        else if (this.questionNumber === 6 && this.isAnwser) {
             this.Q3A = this.createKit('IUMeetup5 > Prefab Anim', "artifact:1456782914212593752", this.animPos, this.animScale, this.animRot);
             this.currentQuestion = this.Q3A;
+        }
+        if (this.questionNumber === 7 && !this.isAnwser) {
+            this.Q4 = this.createKit('IUMeetup5 > Instance Static', "artifact:1456872393480864276", this.animPos, this.animScale, this.animRot);
+            this.currentQuestion = this.Q4;
+        }
+        else if (this.questionNumber === 7 && this.isAnwser) {
+            this.Q4A = this.createKit('IUMeetup5 > Instance Anim', "artifact:1456872393740911125", this.animPos, this.animScale, this.animRot);
+            this.currentQuestion = this.Q4A;
+        }
+        else if (this.questionNumber === 8 && !this.isAnwser) {
+            this.Q5 = this.createKit(this.Q5Name, this.Q5ID, this.animPos, this.animScale, this.animRot);
+            this.currentQuestion = this.Q5;
+        }
+        else if (this.questionNumber === 8 && this.isAnwser) {
+            this.Q5A = this.createKit(this.Q5AName, this.Q5AID, this.animPos, this.animScale, this.animRot);
+            this.currentQuestion = this.Q5A;
+        }
+        else if (this.questionNumber === 9 && !this.isAnwser) {
+            this.Q6 = this.createKit(this.Q6Name, this.Q6ID, this.animPos, this.animScale, this.animRot);
+            this.currentQuestion = this.Q6;
+        }
+        else if (this.questionNumber === 9 && this.isAnwser) {
+            this.Q6A = this.createKit(this.Q6AName, this.Q6AID, this.animPos, this.animScale, this.animRot);
+            this.currentQuestion = this.Q6A;
+        }
+        else if (this.questionNumber === 10 && !this.isAnwser) {
+            this.Q7 = this.createKit(this.Q7Name, this.Q7ID, this.animPos, this.animScale, this.animRot);
+            this.currentQuestion = this.Q7;
         }
     }
 }

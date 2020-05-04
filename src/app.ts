@@ -174,9 +174,9 @@ export default class VRQuiz {
 			this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
 
 		//display first question animation by default 
-		this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774",
-			this.animPos, this.animScale, this.Q12Rot);
-		this.currentQuestion = this.Q1;
+		this.Q8 = this.createKit(this.Q8Name, this.Q8ID,
+			this.animPos, this.Q8Scale, this.Q8Rot);
+		this.currentQuestion = this.Q8;
 
 
 		this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
@@ -231,7 +231,7 @@ export default class VRQuiz {
 		});
 		//if previous is pressed, subtract 1 to question number, set isAnwser to false, and update animation. 
 		previousButtonBehavior.onClick(user => {
-			if (this.questionNumber > 1 && user.id === this.adminID) {
+			if (this.questionNumber > 0 && user.id === this.adminID) {
 				this.resetChoices();
 				this.isAnwser = false;
 				this.anwserBackground.destroy();
@@ -272,52 +272,52 @@ export default class VRQuiz {
 
 		choice1ButtonBehavior.onClick(user => {
 			if (user.id === this.adminID && !this.stopVotes) {
-				this.choice1Text.text.color = new MRE.Color3(0, 1, 0);
 				this.stopVotes = true;
+				this.choice1Text.destroy();
+				this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
+				this.choice1Text.text.color = new MRE.Color3(0, 1, 0);
 			}
 			if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
 				this.usersVoted.push(user.id);
 				this.choice1Count++;
-				this.choice1Text.destroy();
-				this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
 			}
 		});
 		choice2ButtonBehavior.onClick(user => {
 			if (user.id === this.adminID && !this.stopVotes) {
+				this.choice2Text.destroy();
+				this.choice2Text = this.createText('choice 2', this.C2TextPos, this.choice2Count.toString());
 				this.choice2Text.text.color = new MRE.Color3(0, 1, 0);
 				this.stopVotes = true;
 			}
 			if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
 				this.usersVoted.push(user.id);
 				this.choice2Count++;
-				this.choice2Text.destroy();
-				this.choice2Text = this.createText('choice 2', this.C2TextPos, this.choice2Count.toString());
 			}
 		});
 
 		choice3ButtonBehavior.onClick(user => {
 			if (user.id === this.adminID && !this.stopVotes) {
+				this.choice3Text.destroy();
+				this.choice3Text = this.createText('choice 3', this.C3TextPos, this.choice3Count.toString());
 				this.choice3Text.text.color = new MRE.Color3(0, 1, 0);
 				this.stopVotes = true;
 			}
 			if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
 				this.usersVoted.push(user.id);
 				this.choice3Count++;
-				this.choice3Text.destroy();
-				this.choice3Text = this.createText('choice 3', this.C3TextPos, this.choice3Count.toString());
 			}
 		});
 
 		choice4ButtonBehavior.onClick(user => {
 			if (user.id === this.adminID && !this.stopVotes) {
+				this.choice4Text.destroy();
+				this.choice4Text = this.createText('choice 4', this.C4TextPos, this.choice4Count.toString());
 				this.choice4Text.text.color = new MRE.Color3(0, 1, 0);
 				this.stopVotes = true;
 			}
 			if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
 				this.usersVoted.push(user.id);
 				this.choice4Count++;
-				this.choice4Text.destroy();
-				this.choice4Text = this.createText('choice 4', this.C4TextPos, this.choice4Count.toString());
 			}
 		});
 
@@ -389,7 +389,7 @@ export default class VRQuiz {
 
 
 	private updateAnim() {
-		
+
 		if (this.questionNumber === 1 && !this.isAnwser) {
 			this.Q8 = this.createKit(this.Q8Name, this.Q8ID,
 				this.animPos, this.Q8Scale, this.Q8Rot);
