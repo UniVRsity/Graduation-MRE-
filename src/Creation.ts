@@ -38,11 +38,11 @@ export class Creation {
 	 */
 	private started() {
 
-		const keys = Object.keys(Qdatabase);
-		console.log(keys);
-		for (const bodyName of keys) {
-			console.log(bodyName);
-			console.log( Qdatabase[bodyName]);
-		}
+		//const keys = Object.keys(Qdatabase);
+		console.log(Qdatabase["Q5"].name);
+		//for (const bodyName of keys) {
+		//	console.log(bodyName);
+		//	console.log( Qdatabase[bodyName]);
+		//}
 	}
 }

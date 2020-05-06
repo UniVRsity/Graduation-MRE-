@@ -6,7 +6,16 @@
 import * as MRE from '@microsoft/mixed-reality-extension-sdk';
 import { Creation } from './Creation';
 
+interface Question {
+	name: string;
+	ID: string;
+}
 
+interface QuestionDatabase {
+	[key: string]: Question;
+}
+
+const Qdatabase: QuestionDatabase = require('../public/QuestionDatabase.json');
 /**
  * The main class of this app. All the logic goes here.
  */
@@ -139,7 +148,6 @@ export default class VRQuiz {
 	isAnwser = false;
 	currentQuestion = this.next;
 	private usersVoted: MRE.Guid[] = [MRE.ZeroGuid];
-
 
 	constructor(private context: MRE.Context, private baseUrl: string) {
 		this.context.onStarted(() => this.started());
@@ -480,7 +488,7 @@ export default class VRQuiz {
 			this.currentQuestion = this.Q4A;
 		}
 		else if (this.questionNumber === 8 && !this.isAnwser) {
-			this.Q5 = this.createKit(this.Q5Name, this.Q5ID,
+			this.Q5 = this.createKit(Qdatabase["Q5"].name, Qdatabase["Q5"].ID,
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q5;
 		}
@@ -507,4 +515,4 @@ export default class VRQuiz {
 		
 	}
 }
-//questions how do read data from database file
+//array pop and find based on the question number we're on 

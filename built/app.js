@@ -13,6 +13,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const MRE = __importStar(require("@microsoft/mixed-reality-extension-sdk"));
 const Creation_1 = require("./Creation");
+const Qdatabase = require('../public/QuestionDatabase.json');
 /**
  * The main class of this app. All the logic goes here.
  */
@@ -393,7 +394,7 @@ class VRQuiz {
             this.currentQuestion = this.Q4A;
         }
         else if (this.questionNumber === 8 && !this.isAnwser) {
-            this.Q5 = this.createKit(this.Q5Name, this.Q5ID, this.animPos, this.animScale, this.animRot);
+            this.Q5 = this.createKit(Qdatabase["Q5"].name, Qdatabase["Q5"].ID, this.animPos, this.animScale, this.animRot);
             this.currentQuestion = this.Q5;
         }
         else if (this.questionNumber === 8 && this.isAnwser) {
