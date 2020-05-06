@@ -4,7 +4,7 @@
  */
 
 import * as MRE from '@microsoft/mixed-reality-extension-sdk';
-//import { VRQuiz2 } from './anwserChoices';
+import { Creation } from './Creation';
 
 
 /**
@@ -37,6 +37,11 @@ export default class VRQuiz {
 	private Q9Rot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -87 * MRE.DegreesToRadians);
 	private Q9Scale: MRE.Vector3 = new MRE.Vector3(1.1, 1.1, 1.1);
 	private Q9Pos: MRE.Vector3 = new MRE.Vector3(1, .4, -0.1);
+
+	private contrRot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), 90 * MRE.DegreesToRadians);
+	private contrScale: MRE.Vector3 = new MRE.Vector3(3.1, 3.1, 3.1);
+	private contrPos: MRE.Vector3 = MRE.Vector3.FromArray([-.7, 1.4, -0.1]);
+
 
 	private C1TextPos: MRE.Vector3 = new MRE.Vector3(-4, .5, -0.1);
 	private ATextPos: MRE.Vector3 = new MRE.Vector3(-4, -.5, .2);
@@ -144,6 +149,7 @@ export default class VRQuiz {
 	 * Once the context is "started", initialize the app.
 	 */
 	private started() {
+		console.log("here");
 		//create start icon 
 		this.start = this.createKit('Next Button > Start', "artifact:1459632933429052299",
 			this.startPos, this.buttonScale, this.buttonRot);
@@ -323,9 +329,6 @@ export default class VRQuiz {
 
 	}
 
-
-
-
 	//want to set all the counters for the choices to zero and reset the user voters list 
 	private resetChoices() {
 		this.choice1Count = 0;
@@ -422,16 +425,23 @@ export default class VRQuiz {
 		}
 		//if we are at question 1 and not looking for the anwser animation
 		//display question 1 animation and update currentQuestion pointer
+		//if (this.questionNumber === 4 && !this.isAnwser) {
+		//	this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774",
+		//		this.animPos, this.animScale, this.Q12Rot);
+		//	this.currentQuestion = this.Q1;
+		//}
+
 		if (this.questionNumber === 4 && !this.isAnwser) {
-			this.Q1 = this.createKit('IUMeetup5 > Vector3static', "artifact:1456639080749072774",
-				this.animPos, this.animScale, this.Q12Rot);
+			this.Q1 = this.createKit(Creation.Q1.name,
+				Creation.Q1.ID,
+				this.contrPos, this.contrScale, this.contrRot);
 			this.currentQuestion = this.Q1;
 		}
-		else if (this.questionNumber === 4 && this.isAnwser) {
-			this.Q1A = this.createKit('IUMeetup5 > Vector3anim', "artifact:1456639073140605316",
-				this.animPos, this.animScale, this.Q12Rot);
-			this.currentQuestion = this.Q1A;
-		}
+		//else if (this.questionNumber === 4 && this.isAnwser) {
+		//	this.Q1A = this.createKit('IUMeetup5 > Vector3anim', "artifact:1456639073140605316",
+		//		this.animPos, this.animScale, this.Q12Rot);
+		//	this.currentQuestion = this.Q1A;
+		//}
 		//if we are at question 2 and not looking for the anwser animation
 		//display question 2 animation and update currentQuestion pointer
 		if (this.questionNumber === 5 && !this.isAnwser) {
@@ -497,4 +507,4 @@ export default class VRQuiz {
 		
 	}
 }
-		//questions how do read data from database file
+//questions how do read data from database file

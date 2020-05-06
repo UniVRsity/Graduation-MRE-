@@ -3,15 +3,9 @@
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License.
  */
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const MRE = __importStar(require("@microsoft/mixed-reality-extension-sdk"));
+const Qdatabase = require('../public/QuestionDatabase.json');
+//console.log(Qdatabase);
 /**
  * The main class of this app. All the logic goes here.
  */
@@ -19,34 +13,24 @@ class Creation {
     constructor(context, baseUrl) {
         this.context = context;
         this.baseUrl = baseUrl;
-        this.choice1Pos = new MRE.Vector3(0, .0, -0);
-        this.choice2 = null;
-        this.choice1Cube = null;
-        this.choice1Count = 0;
-        this.adminID = null;
-        this.questionNumber = 0;
-        this.isAnwser = false;
+        console.log("aauyyy");
         this.context.onStarted(() => this.started());
     }
-    /**
+    /**hg
      * Once the context is "started", initialize the app.
      */
     started() {
-        this.choice2 = MRE.Actor.Create(this.context, {
-            actor: {
-                name: 'choice1',
-                transform: {
-                    app: { position: this.choice1Pos }
-                },
-                text: {
-                    contents: this.choice1Count.toString(),
-                    anchor: MRE.TextAnchorLocation.MiddleCenter,
-                    color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
-                    height: 0.3
-                }
-            }
-        });
+        const keys = Object.keys(Qdatabase);
+        console.log(keys);
+        for (const bodyName of keys) {
+            console.log(bodyName);
+            console.log(Qdatabase[bodyName]);
+        }
     }
 }
 exports.Creation = Creation;
+Creation.Q1 = {
+    name: "Controller Demonstration > 1447318670182187876 Full Demoo",
+    ID: "artifact:1450169649340613008"
+};
 //# sourceMappingURL=Creation.js.map

@@ -5,48 +5,44 @@
 
 import * as MRE from '@microsoft/mixed-reality-extension-sdk';
 
+interface Question {
+	name: string;
+	ID: string;
+}
+
+interface QuestionDatabase {
+	[key: string]: Question;
+}
+
+const Qdatabase: QuestionDatabase = require('../public/QuestionDatabase.json');
+//console.log(Qdatabase);
 /**
  * The main class of this app. All the logic goes here.
  */
 export class Creation {
 
-
-
-	private choice1Pos: MRE.Vector3 = new MRE.Vector3(0, .0, -0);
-
-
-	private choice2: MRE.Actor = null;
-	private choice1Cube: MRE.Actor = null;
-	private choice1Count = 0;
-
-	private adminID: any = null;
-
-	questionNumber = 0;
-	isAnwser = false;
+	public static Q1: Question = {
+		name: "Controller Demonstration > 1447318670182187876 Full Demoo",
+		ID: "artifact:1450169649340613008"
+	};
 
 
 
 	constructor(private context: MRE.Context, private baseUrl: string) {
+		console.log("aauyyy");
 		this.context.onStarted(() => this.started());
 	}
 
-	/**
+	/**hg
 	 * Once the context is "started", initialize the app.
 	 */
 	private started() {
-		this.choice2 = MRE.Actor.Create(this.context, {
-			actor: {
-				name: 'choice1',
-				transform: {
-					app: { position: this.choice1Pos }
-				},
-				text: {
-					contents: this.choice1Count.toString(),
-					anchor: MRE.TextAnchorLocation.MiddleCenter,
-					color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
-					height: 0.3
-				}
-			}
-		});
+
+		const keys = Object.keys(Qdatabase);
+		console.log(keys);
+		for (const bodyName of keys) {
+			console.log(bodyName);
+			console.log( Qdatabase[bodyName]);
+		}
 	}
 }

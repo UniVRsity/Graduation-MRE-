@@ -31,6 +31,9 @@ export default class VRQuiz {
     private Q9Rot;
     private Q9Scale;
     private Q9Pos;
+    private contrRot;
+    private contrScale;
+    private contrPos;
     private C1TextPos;
     private ATextPos;
     private C1ButtonPos;
