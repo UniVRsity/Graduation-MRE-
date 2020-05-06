@@ -26,10 +26,8 @@ export class Creation {
 		ID: "artifact:1450169649340613008"
 	};
 
-
-
 	constructor(private context: MRE.Context, private baseUrl: string) {
-		console.log("aauyyy");
+		//console.log("aauyyy");
 		this.context.onStarted(() => this.started());
 	}
 
@@ -39,10 +37,10 @@ export class Creation {
 	private started() {
 
 		//const keys = Object.keys(Qdatabase);
-		console.log(Qdatabase["Q5"].name);
+		//console.log(Qdatabase["Q5"].name);
 		//for (const bodyName of keys) {
 		//	console.log(bodyName);
-		//	console.log( Qdatabase[bodyName]);
+		Qdatabase["Q5"];
 		//}
 	}
 }

@@ -2,24 +2,30 @@
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License.
  */
+//export all info to databse file then put databse items in array
+//and reference array points easy to push aand pop new qs
 
 import * as MRE from '@microsoft/mixed-reality-extension-sdk';
-import { Creation } from './Creation';
+//import { Creation } from './Creation';
 
 interface Question {
 	name: string;
 	ID: string;
+	//position: MRE.Vector3;
+	//rotation: MRE.Quaternion;
+	//scale: MRE.Vector3;
 }
 
 interface QuestionDatabase {
 	[key: string]: Question;
 }
 
-const Qdatabase: QuestionDatabase = require('../public/QuestionDatabase.json');
+const QDatabase: QuestionDatabase = require('../public/QuestionDatabase.json');
 /**
  * The main class of this app. All the logic goes here.
  */
 export default class VRQuiz {
+
 	private next: MRE.Actor = null;
 	private previous: MRE.Actor = null;
 	private showAnwser: MRE.Actor = null;
@@ -148,6 +154,8 @@ export default class VRQuiz {
 	isAnwser = false;
 	currentQuestion = this.next;
 	private usersVoted: MRE.Guid[] = [MRE.ZeroGuid];
+	QuestionList = [QDatabase[0]];
+
 
 	constructor(private context: MRE.Context, private baseUrl: string) {
 		this.context.onStarted(() => this.started());
@@ -157,7 +165,14 @@ export default class VRQuiz {
 	 * Once the context is "started", initialize the app.
 	 */
 	private started() {
-		console.log("here");
+		const keys = Object.keys(QDatabase);
+		this.QuestionList.pop();
+		for (const bodyName of keys) {
+			this.QuestionList.push(QDatabase[bodyName]);
+		}
+		for (var i = 0; i< this.QuestionList.length; i++) {
+			console.log(this.QuestionList[i]);
+		}
 		//create start icon 
 		this.start = this.createKit('Next Button > Start', "artifact:1459632933429052299",
 			this.startPos, this.buttonScale, this.buttonRot);
@@ -188,7 +203,7 @@ export default class VRQuiz {
 			this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
 
 		//display first question animation by default 
-		this.Q8 = this.createKit(this.Q8Name, this.Q8ID,
+		this.Q8 = this.createKit(this.QuestionList[0].name, this.QuestionList[0].ID,
 			this.animPos, this.Q8Scale, this.Q8Rot);
 		this.currentQuestion = this.Q8;
 
@@ -402,32 +417,32 @@ export default class VRQuiz {
 	private updateAnim() {
 
 		if (this.questionNumber === 1 && !this.isAnwser) {
-			this.Q8 = this.createKit(this.Q8Name, this.Q8ID,
+			this.Q8 = this.createKit(this.QuestionList[0].name, this.QuestionList[0].ID,
 				this.animPos, this.Q8Scale, this.Q8Rot);
 			this.currentQuestion = this.Q8;
 		}
 		else if (this.questionNumber === 1 && this.isAnwser) {
-			this.Q8A = this.createKit(this.Q8AName, this.Q8AID,
+			this.Q8A = this.createKit(this.QuestionList[1].name, this.QuestionList[1].ID,
 				this.animPos, this.Q8Scale, this.Q8Rot);
 			this.currentQuestion = this.Q8A;
 		}
 		else if (this.questionNumber === 2 && !this.isAnwser) {
-			this.Q9 = this.createKit(this.Q9Name, this.Q9ID,
+			this.Q9 = this.createKit(this.QuestionList[2].name, this.QuestionList[2].ID,
 				this.Q9Pos, this.Q9Scale, this.Q9Rot);
 			this.currentQuestion = this.Q9;
 		}
 		else if (this.questionNumber === 2 && this.isAnwser) {
-			this.Q9A = this.createKit(this.Q9AName, this.Q9AID,
+			this.Q9A = this.createKit(this.QuestionList[3].name, this.QuestionList[3].ID,
 				this.Q9Pos, this.Q9Scale, this.Q9Rot);
 			this.currentQuestion = this.Q9A;
 		}
 		else if (this.questionNumber === 3 && !this.isAnwser) {
-			this.Q10 = this.createKit(this.Q10Name, this.Q10ID,
+			this.Q10 = this.createKit(this.QuestionList[4].name, this.QuestionList[4].ID,
 				this.animPos, this.Q8Scale, this.Q8Rot);
 			this.currentQuestion = this.Q10;
 		}
 		else if (this.questionNumber === 3 && this.isAnwser) {
-			this.Q10A = this.createKit(this.Q10AName, this.Q10AID,
+			this.Q10A = this.createKit(this.QuestionList[5].name, this.QuestionList[5].ID,
 				this.animPos, this.Q8Scale, this.Q8Rot);
 			this.currentQuestion = this.Q10A;
 		}
@@ -440,76 +455,79 @@ export default class VRQuiz {
 		//}
 
 		if (this.questionNumber === 4 && !this.isAnwser) {
-			this.Q1 = this.createKit(Creation.Q1.name,
-				Creation.Q1.ID,
+			this.Q1 = this.createKit(this.QuestionList[6].name, this.QuestionList[6].ID,
 				this.contrPos, this.contrScale, this.contrRot);
 			this.currentQuestion = this.Q1;
 		}
-		//else if (this.questionNumber === 4 && this.isAnwser) {
-		//	this.Q1A = this.createKit('IUMeetup5 > Vector3anim', "artifact:1456639073140605316",
-		//		this.animPos, this.animScale, this.Q12Rot);
-		//	this.currentQuestion = this.Q1A;
-		//}
+		else if (this.questionNumber === 4 && this.isAnwser) {
+			this.Q1A = this.createKit(this.QuestionList[7].name, this.QuestionList[7].ID,
+				this.animPos, this.animScale, this.Q12Rot);
+			this.currentQuestion = this.Q1A;
+		}
 		//if we are at question 2 and not looking for the anwser animation
 		//display question 2 animation and update currentQuestion pointer
 		if (this.questionNumber === 5 && !this.isAnwser) {
-			this.Q2 = this.createKit('IUMeetup5 > Trans Static', "artifact:1461270206671224975",
+			this.Q2 = this.createKit(this.QuestionList[8].name, this.QuestionList[8].ID,
 				this.animPos, this.animScale, this.Q12Rot);
 			this.currentQuestion = this.Q2;
 		}
 
 		else if (this.questionNumber === 5 && this.isAnwser) {
-			this.Q2A = this.createKit('IUMeetup5 > Trans Amin', "artifact:1456650296703844553",
+			this.Q2A = this.createKit(this.QuestionList[9].name, this.QuestionList[9].ID,
 				this.animPos, this.animScale, this.Q12Rot);
 			this.currentQuestion = this.Q2A;
 		}
 
 		if (this.questionNumber === 6 && !this.isAnwser) {
-			this.Q3 = this.createKit('IUMeetup5 > Prefab Static', "artifact:1456774319194505946",
+			this.Q3 = this.createKit(this.QuestionList[10].name, this.QuestionList[10].ID,
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q3;
 		}
 
 		else if (this.questionNumber === 6 && this.isAnwser) {
-			this.Q3A = this.createKit('IUMeetup5 > Prefab Anim', "artifact:1456782914212593752",
+			this.Q3A = this.createKit(this.QuestionList[11].name, this.QuestionList[11].ID,
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q3A;
 		}
 
 
 		if (this.questionNumber === 7 && !this.isAnwser) {
-			this.Q4 = this.createKit('IUMeetup5 > Instance Static', "artifact:1456872393480864276",
+			this.Q4 = this.createKit(this.QuestionList[12].name, this.QuestionList[12].ID,
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q4;
 		}
 		else if (this.questionNumber === 7 && this.isAnwser) {
-			this.Q4A = this.createKit('IUMeetup5 > Instance Anim', "artifact:1456872393740911125",
+			this.Q4A = this.createKit(this.QuestionList[13].name, this.QuestionList[13].ID,
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q4A;
 		}
 		else if (this.questionNumber === 8 && !this.isAnwser) {
-			this.Q5 = this.createKit(Qdatabase["Q5"].name, Qdatabase["Q5"].ID,
+			this.Q5 = this.createKit(this.QuestionList[14].name, this.QuestionList[14].ID,
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q5;
 		}
 		else if (this.questionNumber === 8 && this.isAnwser) {
-			this.Q5A = this.createKit(this.Q5AName, this.Q5AID,
+			this.Q5A = this.createKit(this.QuestionList[15].name, this.QuestionList[15].ID,
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q5A;
 		}
 		else if (this.questionNumber === 9 && !this.isAnwser) {
-			this.Q6 = this.createKit(this.Q6Name, this.Q6ID,
+			this.Q6 = this.createKit(this.QuestionList[16].name, this.QuestionList[16].ID,
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q6;
 		}
 		else if (this.questionNumber === 9 && this.isAnwser) {
-			this.Q6A = this.createKit(this.Q6AName, this.Q6AID,
+			this.Q6A = this.createKit(this.QuestionList[17].name, this.QuestionList[17].ID,
 				this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q6A;
 		}
 		else if (this.questionNumber === 10 && !this.isAnwser) {
-			this.Q7 = this.createKit(this.Q7Name, this.Q7ID,
+			console.log(this.QuestionList[4].name);
+			console.log(this.QuestionList[4].ID);
+			this.Q7 = this.createKit("Vectors > 3 D Mag Stat", "artifact:1463303125346550594",
 				this.animPos, this.animScale, this.animRot);
+			//this.Q7 = this.createKit(this.QuestionList[4].name, this.QuestionList[4].name,
+			//	this.animPos, this.animScale, this.animRot);
 			this.currentQuestion = this.Q7;
 		}
 		

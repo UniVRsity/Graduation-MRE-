@@ -13,7 +13,7 @@ class Creation {
     constructor(context, baseUrl) {
         this.context = context;
         this.baseUrl = baseUrl;
-        console.log("aauyyy");
+        //console.log("aauyyy");
         this.context.onStarted(() => this.started());
     }
     /**hg
@@ -21,10 +21,10 @@ class Creation {
      */
     started() {
         //const keys = Object.keys(Qdatabase);
-        console.log(Qdatabase["Q5"].name);
+        //console.log(Qdatabase["Q5"].name);
         //for (const bodyName of keys) {
         //	console.log(bodyName);
-        //	console.log( Qdatabase[bodyName]);
+        Qdatabase["Q5"];
         //}
     }
 }

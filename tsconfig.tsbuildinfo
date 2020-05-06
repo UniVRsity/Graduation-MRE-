@@ -722,12 +722,12 @@
         "signature": "153bc9bd224c1c6646bfa8f350ec1c260c71a0c4f03c250df4332b9a9802ad47"
       },
       "./src/creation.ts": {
-        "version": "a0901ee9837b28f012d29736f531a0e854c53c4068e47d97b16e4a166f87c383",
+        "version": "2660ec79da3739156f96b1fdf22649cd0f2b565094cc3cc566be805b46785503",
         "signature": "82bc720a5005555e438970146271bc8f106a1ec4b7d95bb8cad0de6d519cc65a"
       },
       "./src/app.ts": {
-        "version": "05e8401e8d60c878a41363ae5a1a41dbd7897798f92f70a045bfe7586723ee2a",
-        "signature": "8ea9ad7a9cb013ba094c86a501ac407e7d05e72bae4c70a9584830a0f42b0945"
+        "version": "e54cb4c5688d94861a76222b4771d744a61ef149ad2dbf20e35e75e50e75f944",
+        "signature": "c800f0a7559b2da7332fbb2805eb7d5251a5f67dd3b75471356a8c2b466e6afb"
       },
       "./node_modules/@types/dotenv/index.d.ts": {
         "version": "9fe460fab563f49a7f51e7f5c38d5dd605a819fd6d0748df7ce5dc1a45eb896f",
@@ -1339,8 +1339,7 @@
         "./node_modules/@microsoft/mixed-reality-extension-sdk/built/index.d.ts"
       ],
       "./src/app.ts": [
-        "./node_modules/@microsoft/mixed-reality-extension-sdk/built/index.d.ts",
-        "./src/creation.ts"
+        "./node_modules/@microsoft/mixed-reality-extension-sdk/built/index.d.ts"
       ],
       "./node_modules/@types/dotenv/index.d.ts": [
         "./node_modules/@types/node/index.d.ts"

@@ -1,46 +1,107 @@
 {
-	"Q5": {
-		"name": "IUMeetup5 > Enemy Dir Static",
-		"ID": "artifact:1456732643608494774"
-	},
-	"Q5A": {
-		"name": "IUMeetup5 > Enemy Dir",
-		"ID": "artifact:1456732643340059317"
-	},
-	"Q6": {
-		"name": "IUMeetup5 > E Speed Static",
-		"ID": "artifact:1456755778206564729"
-	},
-	"Q6A": {
-		"name": "IUMeetup5 > E Speed Anim",
-		"ID": "artifact:1456755778072347000"
-	},
-	"Q7": {
-		"name": "IUMeetup5 > E Speed Sol",
-		"ID": "artifact:1456774319068676825"
-	},
-	"Q8": {
+
+
+	"Vectors > Form Vect Stat": {
 		"name": "Vectors > Form Vect Stat",
 		"ID": "artifact:1463303124692239168"
 	},
-	"Q8A": {
+	"Vectors > Form Vect Anim": {
 		"name": "Vectors > Form Vect Anim",
 		"ID": "artifact:1463303124952286017"
 	},
-	"Q9": {
+
+
+
+	"Vectors > Vel Static": {
 		"name": "Vectors > Vel Static",
 		"ID": "artifact:1463303125606597443"
 	},
-	"Q9A": {
+	"Vectors > Vel Anim": {
 		"name": "Vectors > Vel Anim",
 		"ID": "artifact:1463303124432192319"
 	},
-	"Q10": {
-		"name": "IUMeetup5 > E Speed Sol",
-		"ID": "artifact:1456774319068676825"
+
+
+
+	"Vectors > 3 D Mag Stat": {
+		"name": "Vectors > 3 D Mag Stat",
+		"ID": "artifact:1463303125346550594"
 	},
-	"Q10A": {
-		"name": "IUMeetup5 > E Speed Sol",
-		"ID": "artifact:1456774319068676825"
+	"Vectors > 3 D Mag Anim": {
+		"name": "Vectors > 3 D Mag Anim",
+		"ID": "artifact:1463272035898622891"
+	},
+
+
+
+	"Controller Demonstration > 1447318670182187876 Full Demoo": {
+		"name": "Controller Demonstration > 1447318670182187876 Full Demoo",
+		"ID": "artifact:1450169649340613008"
+	},
+	"Controller Demonstration > 1447318670182187876 Full Demoo Anwser": {
+		"name": "Controller Demonstration > 1447318670182187876 Full Demoo",
+		"ID": "artifact:1450169649340613008"
+	},
+
+
+
+
+	"IUMeetup5 > Trans Static": {
+		"name": "IUMeetup5 > Trans Static",
+		"ID": "artifact:1461270206671224975"
+	},
+	"IUMeetup5 > Trans Amin": {
+		"name": "IUMeetup5 > Trans Amin",
+		"ID": "artifact:1456650296703844553"
+	},
+
+
+
+
+	"IUMeetup5 > Prefab Static1": {
+		"name": "IUMeetup5 > Prefab Static1",
+		"ID": "1466199499104846693"
+	},
+	"IUMeetup5 > Prefab Anim": {
+		"name": "IUMeetup5 > Prefab Anim",
+		"ID": "artifact:1456782914212593752"
+	},
+
+
+
+
+	"IUMeetup5 > Instance Static": {
+		"name": "IUMeetup5 > Instance Static",
+		"ID": "artifact:1456872393480864276"
+	},
+	"IUMeetup5 > Instance Anim": {
+		"name": "IUMeetup5 > Instance Anim",
+		"ID": "artifact:1456872393740911125"
+	},
+
+
+
+
+	"IUMeetup5 > Enemy Dir Static": {
+		"name": "IUMeetup5 > Enemy Dir Static",
+		"ID": "artifact:1456732643608494774"
+	},
+	"IUMeetup5 > Enemy Dir": {
+		"name": "IUMeetup5 > Enemy Dir",
+		"ID": "artifact:1456732643340059317"
+	},
+
+
+
+
+	"IUMeetup5 > E Speed Static": {
+		"name": "IUMeetup5 > E Speed Static",
+		"ID": "artifact:1456755778206564729"
+	},
+	"IUMeetup5 > E Speed Anim": {
+		"name": "IUMeetup5 > E Speed Anim",
+		"ID": "artifact:1456755778072347000"
 	}
+
+
 }

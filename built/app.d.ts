@@ -3,6 +3,10 @@
  * Licensed under the MIT License.
  */
 import * as MRE from '@microsoft/mixed-reality-extension-sdk';
+interface Question {
+    name: string;
+    ID: string;
+}
 /**
  * The main class of this app. All the logic goes here.
  */
@@ -111,6 +115,7 @@ export default class VRQuiz {
     isAnwser: boolean;
     currentQuestion: MRE.Actor;
     private usersVoted;
+    QuestionList: Question[];
     constructor(context: MRE.Context, baseUrl: string);
     /**
      * Once the context is "started", initialize the app.
@@ -124,4 +129,5 @@ export default class VRQuiz {
     private createText;
     private updateAnim;
 }
+export {};
 //# sourceMappingURL=app.d.ts.map
