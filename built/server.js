@@ -11,7 +11,6 @@ const mixed_reality_extension_sdk_1 = require("@microsoft/mixed-reality-extensio
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = require("path");
 const app_1 = __importDefault(require("./app"));
-const Creation_1 = require("./Creation");
 /* eslint-disable no-console */
 process.on('uncaughtException', err => console.log('uncaughtException', err));
 process.on('unhandledRejection', reason => console.log('unhandledRejection', reason));
@@ -25,5 +24,4 @@ const server = new mixed_reality_extension_sdk_1.WebHost({
 });
 // Handle new application sessions
 server.adapter.onConnection(context => new app_1.default(context, server.baseUrl));
-server.adapter.onConnection(context => new Creation_1.Creation(context, server.baseUrl));
 //# sourceMappingURL=server.js.map

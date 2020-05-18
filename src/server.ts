@@ -7,7 +7,7 @@ import { WebHost } from '@microsoft/mixed-reality-extension-sdk';
 import dotenv from 'dotenv';
 import { resolve as resolvePath } from 'path';
 import App from './app';
-import { Creation } from './Creation';
+
 
 /* eslint-disable no-console */
 process.on('uncaughtException', err => console.log('uncaughtException', err));
@@ -25,6 +25,5 @@ const server = new WebHost({
 
 // Handle new application sessions
 server.adapter.onConnection(context => new App(context, server.baseUrl));
-server.adapter.onConnection(context => new Creation(context, server.baseUrl));
 
 

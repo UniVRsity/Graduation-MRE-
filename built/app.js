@@ -1,10 +1,12 @@
 "use strict";
+/*
+array pop and find based on the question number we're on
 /*!
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License.
  */
-//export all info to databse file then put databse items in array
-//and reference array points easy to push aand pop new qs
+// export all info to databse file then put databse items in array
+// and reference array points easy to push aand pop new qs
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -14,382 +16,131 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const MRE = __importStar(require("@microsoft/mixed-reality-extension-sdk"));
-const QDatabase = require('../public/QuestionDatabase.json');
+const Creation_1 = require("./Creation");
 /**
  * The main class of this app. All the logic goes here.
  */
-class VRQuiz {
+class Graduation {
     constructor(context, baseUrl) {
         this.context = context;
         this.baseUrl = baseUrl;
-        this.next = null;
-        this.previous = null;
-        this.showAnwser = null;
-        this.anwserBackground = null;
-        this.start = null;
-        this.light = null;
-        this.anwserBackgroundPos = MRE.Vector3.FromArray([-1.75, -1, -0.2]);
-        this.anwserPos = MRE.Vector3.FromArray([-1.75, -1, -0.1]);
-        this.nextPos = MRE.Vector3.FromArray([-.4, -1, -0.1]);
-        this.prevPos = MRE.Vector3.FromArray([0, -1, -0.1]);
-        this.startPos = MRE.Vector3.FromArray([-.4, -1, -0.1]);
-        this.buttonRot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -180.0 * MRE.DegreesToRadians);
-        this.buttonScale = MRE.Vector3.FromArray([0.08, 0.08, 0.08]);
-        this.animPos = MRE.Vector3.FromArray([-.7, 0, -0.1]);
-        this.animScale = MRE.Vector3.FromArray([.4, .4, .4]);
-        this.animRot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -267.0 * MRE.DegreesToRadians);
-        this.Q12Rot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -410 * MRE.DegreesToRadians);
-        this.Q8Rot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -60 * MRE.DegreesToRadians);
-        this.Q8Scale = MRE.Vector3.FromArray([.3, .3, .3]);
-        this.Q9Rot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -87 * MRE.DegreesToRadians);
-        this.Q9Scale = new MRE.Vector3(1.1, 1.1, 1.1);
-        this.Q9Pos = new MRE.Vector3(1, .4, -0.1);
-        this.contrRot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), 90 * MRE.DegreesToRadians);
-        this.contrScale = new MRE.Vector3(3.1, 3.1, 3.1);
-        this.contrPos = MRE.Vector3.FromArray([-.7, 1.4, -0.1]);
-        this.C1TextPos = new MRE.Vector3(-4, .5, -0.1);
-        this.ATextPos = new MRE.Vector3(-4, -.5, .2);
-        this.C1ButtonPos = new MRE.Vector3(-4, -.5, -0.1);
-        this.C2TextPos = new MRE.Vector3(-5, .5, -0.1);
-        this.BTextPos = new MRE.Vector3(-5, -.5, .2);
-        this.C2ButtonPos = new MRE.Vector3(-5, -.5, -0.1);
-        this.C3TextPos = new MRE.Vector3(-6, .5, -0.1);
-        this.CTextPos = new MRE.Vector3(-6, -.5, .2);
-        this.C3ButtonPos = new MRE.Vector3(-6, -.5, -0.1);
-        this.C4TextPos = new MRE.Vector3(-7, .5, -0.1);
-        this.DTextPos = new MRE.Vector3(-7, -.5, .2);
-        this.C4ButtonPos = new MRE.Vector3(-7, -.5, -0.1);
-        this.temp = null;
-        this.Q1 = null;
-        this.Q2 = null;
-        this.Q3 = null;
-        this.Q4 = null;
-        this.Q5 = null;
-        this.Q6 = null;
-        this.Q7 = null;
-        this.Q8 = null;
-        this.Q9 = null;
-        this.Q10 = null;
-        this.Q1A = null;
-        this.Q2A = null;
-        this.Q3A = null;
-        this.Q4A = null;
-        this.Q5A = null;
-        this.Q6A = null;
-        this.Q7A = null;
-        this.Q8A = null;
-        this.Q9A = null;
-        this.Q10A = null;
-        this.choice1Text = null;
-        this.AText = null;
-        this.choice1Button = null;
-        this.choice1Count = 0;
-        this.choice2Text = null;
-        this.BText = null;
-        this.choice2Button = null;
-        this.choice2Count = 0;
-        this.choice3Text = null;
-        this.CText = null;
-        this.choice3Button = null;
-        this.choice3Count = 0;
-        this.choice4Text = null;
-        this.DText = null;
-        this.choice4Button = null;
-        this.choice4Count = 0;
-        this.adminID = null;
-        this.stopVotes = false;
-        this.questionNumber = 0;
-        this.isAnwser = false;
-        this.currentQuestion = this.next;
-        this.usersVoted = [MRE.ZeroGuid];
-        this.QuestionList = [QDatabase[0]];
+        this.cap = null;
+        this.capPos = new MRE.Vector3(0, .07, -0.06);
+        this.capScale = new MRE.Vector3(.3, .3, .3);
+        this.scrollScale = new MRE.Vector3(.15, .15, .15);
+        this.capRot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -215.0 * MRE.DegreesToRadians);
+        this.scroll = null;
+        this.attachedHats = new Map();
+        // use () => {} syntax here to get proper scope binding when called via setTimeout()
+        // if async is required, next line becomes private startedImpl = async () => {
+        this.startedImpl = async () => {
+            // Show the hat menu.
+            this.showHatMenu();
+        };
+        this.assets = new MRE.AssetContainer(context);
+        // Hook the context events we're interested in.
         this.context.onStarted(() => this.started());
+        this.context.onUserLeft(user => this.userLeft(user));
     }
     /**
      * Once the context is "started", initialize the app.
      */
-    started() {
-        const keys = Object.keys(QDatabase);
-        this.QuestionList.pop();
-        for (const bodyName of keys) {
-            this.QuestionList.push(QDatabase[bodyName]);
+    async started() {
+        // Check whether code is running in a debuggable watched filesystem
+        // environment and if so delay starting the app by 1 second to give
+        // the debugger time to detect that the server has restarted and reconnect.
+        // The delay value below is in milliseconds so 1000 is a one second delay.
+        // You may need to increase the delay or be able to decrease it depending
+        // on the speed of your PC.
+        const delay = 1000;
+        const argv = process.execArgv.join();
+        const isDebug = argv.includes('inspect') || argv.includes('debug');
+        // // version to use with non-async code
+        // if (isDebug) {
+        // 	setTimeout(this.startedImpl, delay);
+        // } else {
+        // 	this.startedImpl();
+        // }
+        // version to use with async code
+        if (isDebug) {
+            await new Promise(resolve => setTimeout(resolve, delay));
+            await this.startedImpl();
         }
-        for (var i = 0; i < this.QuestionList.length; i++) {
-            console.log(this.QuestionList[i]);
+        else {
+            await this.startedImpl();
         }
-        //create start icon 
-        this.start = this.createKit('Next Button > Start', "artifact:1459632933429052299", this.startPos, this.buttonScale, this.buttonRot);
-        //make start a button
-        const startButtonBehavior = this.start.setBehavior(MRE.ButtonBehavior);
-        // When clicked trigger quiz interface and put up first question 
-        startButtonBehavior.onClick(user => {
-            this.start.destroy();
-            //change question number to 1
-            this.questionNumber++;
-            this.beginQuiz();
-            this.adminID = user.id;
-        });
+        this.scroll = Creation_1.Creation.createKit(this.context, "Graduation > Scroll", true, "1428444440862655433", this.capPos, this.scrollScale, this.capRot);
     }
-    beginQuiz() {
-        //create next icon  
-        this.next = this.createKit('Next Button > Next Button', "artifact:1459550776266326323", this.nextPos, this.buttonScale, this.buttonRot);
-        //create previous icon 
-        this.previous = this.createKit('Next Button > Prev', "artifact:1459576871355154850", this.prevPos, this.buttonScale, this.buttonRot);
-        this.showAnwser = this.createKit('Next Button > Show Anwser', "artifact:1460403930600046846", this.anwserPos, this.buttonScale, this.buttonRot);
-        this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
-        //display first question animation by default 
-        this.Q1 = this.createKit(this.QuestionList[0].name, this.QuestionList[0].ID, this.animPos, this.Q8Scale, this.Q8Rot);
-        this.currentQuestion = this.Q1;
-        this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
-        this.AText = this.createText('Choice 1', this.ATextPos, "A");
-        //this.choice1Text.appearance.material.color = MRE.Color4.FromColor3(MRE.Color3.Green(), 4);
-        this.choice1Button = this.createKit('IUMeetup5 > Choice 1', "artifact:1462468918881813077", this.C1ButtonPos, this.animScale, this.buttonRot);
-        this.choice2Text = this.createText('choice 2', this.C2TextPos, this.choice1Count.toString());
-        this.BText = this.createText('Choice 2', this.BTextPos, "B");
-        this.choice2Button = this.createKit('IUMeetup5 > Choice1', "artifact:1462468918881813077", this.C2ButtonPos, this.animScale, this.buttonRot);
-        this.choice3Text = this.createText('choice 3', this.C3TextPos, this.choice1Count.toString());
-        this.CText = this.createText('Choice 3', this.CTextPos, "C");
-        this.choice3Button = this.createKit('IUMeetup5 > Choice1', "artifact:1462468918881813077", this.C3ButtonPos, this.animScale, this.buttonRot);
-        this.choice4Text = this.createText('choice 4', this.C4TextPos, this.choice1Count.toString());
-        this.DText = this.createText('Choice 4', this.DTextPos, "D");
-        this.choice4Button = this.createKit('IUMeetup5 > Choice1', "artifact:1462468918881813077", this.C4ButtonPos, this.animScale, this.buttonRot);
-        this.setNavButtons();
-        this.setChoicesButtons();
+    userLeft(user) {
+        // If the user was wearing a hat, destroy it. Otherwise it would be
+        // orphaned in the world.
+        this.removeHats(user);
     }
-    //updates state based on user input 
-    setNavButtons() {
-        //make next, previous, and Anwser icon into button 
-        const nextButtonBehavior = this.next.setBehavior(MRE.ButtonBehavior);
-        const previousButtonBehavior = this.previous.setBehavior(MRE.ButtonBehavior);
-        const showAnwserButtonBehavior = this.showAnwser.setBehavior(MRE.ButtonBehavior);
-        //if previous is pressed subtract 1 to question number, set isAnwser to false, and update animation,
-        //and reset the choices count
-        nextButtonBehavior.onClick(user => {
-            if (this.questionNumber < 10 && user.id === this.adminID) {
-                this.resetChoices();
-                this.stopVotes = false;
-                this.isAnwser = false;
-                this.anwserBackground.destroy();
-                this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
-                this.questionNumber++;
-                this.currentQuestion.destroy();
-                this.updateAnim();
-            }
-        });
-        //if previous is pressed, subtract 1 to question number, set isAnwser to false, and update animation. 
-        previousButtonBehavior.onClick(user => {
-            if (this.questionNumber > 0 && user.id === this.adminID) {
-                this.resetChoices();
-                this.isAnwser = false;
-                this.anwserBackground.destroy();
-                this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
-                this.questionNumber--;
-                this.currentQuestion.destroy();
-                this.updateAnim();
-            }
-        });
-        //if anwserOff is pressed destroy it and enable anwserOn icon and update the animation 
-        showAnwserButtonBehavior.onClick(user => {
-            if (user.id === this.adminID) {
-                this.isAnwser = !this.isAnwser;
-                this.anwserBackground.destroy();
-                if (this.isAnwser) {
-                    this.anwserBackground = this.createKit('Next Button > Anwser On Back', "artifact:1460401277274948054", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
-                }
-                else {
-                    this.anwserBackground = this.createKit('Next Button > Anwser Off Back', "artifact:1460401277014901205", this.anwserBackgroundPos, this.buttonScale, this.buttonRot);
-                }
-                this.currentQuestion.destroy();
-                this.updateAnim();
-            }
-        });
-        this.setChoicesButtons();
-    }
-    setChoicesButtons() {
-        const choice1ButtonBehavior = this.choice1Button.setBehavior(MRE.ButtonBehavior);
-        const choice2ButtonBehavior = this.choice2Button.setBehavior(MRE.ButtonBehavior);
-        const choice3ButtonBehavior = this.choice3Button.setBehavior(MRE.ButtonBehavior);
-        const choice4ButtonBehavior = this.choice4Button.setBehavior(MRE.ButtonBehavior);
-        choice1ButtonBehavior.onClick(user => {
-            if (user.id === this.adminID && !this.stopVotes) {
-                this.stopVotes = true;
-                this.choice1Text.destroy();
-                this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
-                this.choice1Text.text.color = new MRE.Color3(0, 1, 0);
-            }
-            if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
-                this.usersVoted.push(user.id);
-                this.choice1Count++;
-            }
-        });
-        choice2ButtonBehavior.onClick(user => {
-            if (user.id === this.adminID && !this.stopVotes) {
-                this.choice2Text.destroy();
-                this.choice2Text = this.createText('choice 2', this.C2TextPos, this.choice2Count.toString());
-                this.choice2Text.text.color = new MRE.Color3(0, 1, 0);
-                this.stopVotes = true;
-            }
-            if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
-                this.usersVoted.push(user.id);
-                this.choice2Count++;
-            }
-        });
-        choice3ButtonBehavior.onClick(user => {
-            if (user.id === this.adminID && !this.stopVotes) {
-                this.choice3Text.destroy();
-                this.choice3Text = this.createText('choice 3', this.C3TextPos, this.choice3Count.toString());
-                this.choice3Text.text.color = new MRE.Color3(0, 1, 0);
-                this.stopVotes = true;
-            }
-            if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
-                this.usersVoted.push(user.id);
-                this.choice3Count++;
-            }
-        });
-        choice4ButtonBehavior.onClick(user => {
-            if (user.id === this.adminID && !this.stopVotes) {
-                this.choice4Text.destroy();
-                this.choice4Text = this.createText('choice 4', this.C4TextPos, this.choice4Count.toString());
-                this.choice4Text.text.color = new MRE.Color3(0, 1, 0);
-                this.stopVotes = true;
-            }
-            if (!this.usersVoted.includes(user.id) && !this.stopVotes) {
-                this.usersVoted.push(user.id);
-                this.choice4Count++;
-            }
-        });
-    }
-    //want to set all the counters for the choices to zero and reset the user voters list 
-    resetChoices() {
-        this.choice1Count = 0;
-        this.choice2Count = 0;
-        this.choice3Count = 0;
-        this.choice4Count = 0;
-        this.choice1Text.destroy();
-        this.choice2Text.destroy();
-        this.choice3Text.destroy();
-        this.choice4Text.destroy();
-        this.choice1Text = this.createText('choice 1', this.C1TextPos, this.choice1Count.toString());
-        this.choice2Text = this.createText('choice 2', this.C2TextPos, this.choice2Count.toString());
-        this.choice3Text = this.createText('choice 3', this.C3TextPos, this.choice3Count.toString());
-        this.choice4Text = this.createText('choice 4', this.C4TextPos, this.choice4Count.toString());
-        this.usersVoted = [MRE.ZeroGuid];
-    }
-    //returns an MRE actor given the arguments below 
-    createKit(name, artifactID, kitPos, kitScale, kitRotation) {
-        this.temp = MRE.Actor.CreateFromLibrary(this.context, {
-            resourceId: artifactID,
+    showHatMenu() {
+        // Create a parent object for all the menu items.
+        const menu = MRE.Actor.Create(this.context, {});
+        let y = 0.3;
+        // Create menu button
+        const buttonMesh = this.assets.createBoxMesh('button', 0.3, 0.3, 0.01);
+        // Create button for graduation hat 
+        const button = MRE.Actor.Create(this.context, {
             actor: {
-                name: name,
+                parentId: menu.id,
+                name: "Grad Cap",
+                appearance: { meshId: buttonMesh.id },
+                collider: { geometry: { shape: MRE.ColliderType.Auto } },
                 transform: {
-                    local: {
-                        position: kitPos,
-                        rotation: kitRotation,
-                        scale: kitScale
-                    }
+                    local: { position: { x: 0, y, z: 0 } }
                 }
             }
         });
-        return this.temp;
-    }
-    //returns an MRE actor for text 
-    createText(name, textPos, content) {
-        this.temp = MRE.Actor.Create(this.context, {
+        // Set a click handler on the button.
+        button.setBehavior(MRE.ButtonBehavior)
+            .onClick(user => this.wearHat("this sucks > Cap No Colid", user.id));
+        // Create a label for the menu entry.
+        MRE.Actor.Create(this.context, {
             actor: {
-                name: name,
-                transform: {
-                    app: {
-                        position: textPos,
-                        rotation: this.buttonRot
-                    }
-                },
+                parentId: menu.id,
+                name: 'label',
                 text: {
-                    contents: content,
-                    anchor: MRE.TextAnchorLocation.MiddleCenter,
-                    color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
-                    height: 0.3
+                    contents: "Grad Cap",
+                    height: 0.5,
+                    anchor: MRE.TextAnchorLocation.MiddleLeft
+                },
+                transform: {
+                    local: { position: { x: 0.5, y, z: 0 } }
                 }
             }
         });
-        return this.temp;
+        // Create a label for the menu title.
+        // MRE.Actor.Create(this.context, {
+        // 	actor: {
+        // 		parentId: menu.id,
+        // 		name: 'label',
+        // 		text: {
+        // 			contents: ''.padStart(8, ' ') + "Wear Graduation Hat",
+        // 			height: 0.8,
+        // 			anchor: MRE.TextAnchorLocation.MiddleCenter,
+        // 			color: MRE.Color3.Yellow()
+        // 		},
+        // 		transform: {
+        // 			local: { position: { x: 0.5, y: y + 0.25, z: 0 } }
+        // 		}
+        // 	}
+        // });
     }
-    updateAnim() {
-        if (this.questionNumber === 1 && !this.isAnwser) {
-            this.Q1 = this.createKit(this.QuestionList[0].name, this.QuestionList[0].ID, this.animPos, this.Q8Scale, this.Q8Rot);
-            this.currentQuestion = this.Q1;
+    wearHat(hatId, userId) {
+        // If the user is wearing a hat, destroy it.
+        this.removeHats(this.context.user(userId));
+        this.attachedHats.set(userId, Creation_1.Creation.createAttachedKit(this.context, "this sucks > Cap No Colid", true, "1474117174535651825", this.capPos, this.capScale, this.capRot, userId));
+    }
+    removeHats(user) {
+        if (this.attachedHats.has(user.id)) {
+            this.attachedHats.get(user.id).destroy();
         }
-        else if (this.questionNumber === 1 && this.isAnwser) {
-            this.Q1A = this.createKit(this.QuestionList[1].name, this.QuestionList[1].ID, this.animPos, this.Q8Scale, this.Q8Rot);
-            this.currentQuestion = this.Q1A;
-        }
-        else if (this.questionNumber === 2 && !this.isAnwser) {
-            this.Q2 = this.createKit(this.QuestionList[2].name, this.QuestionList[2].ID, this.Q9Pos, this.Q9Scale, this.Q9Rot);
-            this.currentQuestion = this.Q2;
-        }
-        else if (this.questionNumber === 2 && this.isAnwser) {
-            this.Q2A = this.createKit(this.QuestionList[3].name, this.QuestionList[3].ID, this.Q9Pos, this.Q9Scale, this.Q9Rot);
-            this.currentQuestion = this.Q2A;
-        }
-        else if (this.questionNumber === 3 && !this.isAnwser) {
-            this.Q3 = this.createKit(this.QuestionList[4].name, this.QuestionList[4].ID, this.animPos, this.Q8Scale, this.Q8Rot);
-            this.currentQuestion = this.Q3;
-        }
-        else if (this.questionNumber === 3 && this.isAnwser) {
-            this.Q3A = this.createKit(this.QuestionList[5].name, this.QuestionList[5].ID, this.animPos, this.Q8Scale, this.Q8Rot);
-            this.currentQuestion = this.Q3A;
-        }
-        if (this.questionNumber === 4 && !this.isAnwser) {
-            this.Q4 = this.createKit(this.QuestionList[6].name, this.QuestionList[6].ID, this.contrPos, this.contrScale, this.contrRot);
-            this.currentQuestion = this.Q4;
-        }
-        else if (this.questionNumber === 4 && this.isAnwser) {
-            this.Q4A = this.createKit(this.QuestionList[7].name, this.QuestionList[7].ID, this.animPos, this.animScale, this.Q12Rot);
-            this.currentQuestion = this.Q4A;
-        }
-        //if we are at question 2 and not looking for the anwser animation
-        //display question 2 animation and update currentQuestion pointer
-        if (this.questionNumber === 5 && !this.isAnwser) {
-            this.Q5 = this.createKit(this.QuestionList[8].name, this.QuestionList[8].ID, this.animPos, this.animScale, this.Q12Rot);
-            this.currentQuestion = this.Q5;
-        }
-        else if (this.questionNumber === 5 && this.isAnwser) {
-            this.Q5A = this.createKit(this.QuestionList[9].name, this.QuestionList[9].ID, this.animPos, this.animScale, this.Q12Rot);
-            this.currentQuestion = this.Q5A;
-        }
-        if (this.questionNumber === 6 && !this.isAnwser) {
-            this.Q6 = this.createKit(this.QuestionList[10].name, this.QuestionList[10].ID, this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q6;
-        }
-        else if (this.questionNumber === 6 && this.isAnwser) {
-            this.Q6A = this.createKit(this.QuestionList[11].name, this.QuestionList[11].ID, this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q6A;
-        }
-        if (this.questionNumber === 7 && !this.isAnwser) {
-            this.Q7 = this.createKit(this.QuestionList[12].name, this.QuestionList[12].ID, this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q7;
-        }
-        else if (this.questionNumber === 7 && this.isAnwser) {
-            this.Q7A = this.createKit(this.QuestionList[13].name, this.QuestionList[13].ID, this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q7A;
-        }
-        else if (this.questionNumber === 8 && !this.isAnwser) {
-            this.Q8 = this.createKit(this.QuestionList[14].name, this.QuestionList[14].ID, this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q8;
-        }
-        else if (this.questionNumber === 8 && this.isAnwser) {
-            this.Q8A = this.createKit(this.QuestionList[15].name, this.QuestionList[15].ID, this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q8A;
-        }
-        else if (this.questionNumber === 9 && !this.isAnwser) {
-            this.Q9 = this.createKit(this.QuestionList[16].name, this.QuestionList[16].ID, this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q9;
-        }
-        else if (this.questionNumber === 9 && this.isAnwser) {
-            this.Q9A = this.createKit(this.QuestionList[17].name, this.QuestionList[17].ID, this.animPos, this.animScale, this.animRot);
-            this.currentQuestion = this.Q9A;
-        }
+        this.attachedHats.delete(user.id);
     }
 }
-exports.default = VRQuiz;
+exports.default = Graduation;
 //array pop and find based on the question number we're on 
 //# sourceMappingURL=app.js.map
