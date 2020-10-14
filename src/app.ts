@@ -17,7 +17,7 @@ export default class Graduation {
 
 	private assets: MRE.AssetContainer;
 	private cap: MRE.Actor = null;
-	private capPos: MRE.Vector3 = new MRE.Vector3(0, .07, -0.06);
+	private capPos: MRE.Vector3 = new MRE.Vector3(0, .09, -0.06);
 	private capScale: MRE.Vector3 = new MRE.Vector3(.3, .3, .3);
 	private scrollScale: MRE.Vector3 = new MRE.Vector3(.15, .15, .15);
 	private capRot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -215.0 * MRE.DegreesToRadians);
