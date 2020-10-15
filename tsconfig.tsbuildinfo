@@ -726,7 +726,7 @@
         "signature": "0738654f2e4308c5e4df532348b99bfcd150350c055fd534603b14f86fa9afb1"
       },
       "./src/app.ts": {
-        "version": "03ed05382711ffa1089a715c7632b08790cd1e168548fe854d0f32a8da308991",
+        "version": "fe476199d8650338e20e240e8d13059e7dc09cc53a62a216d44a8b7dfac04f49",
         "signature": "793ea8b3698d52cc8428eaf3d1fa64029df571ce8416c025bb0008fed95d8312"
       },
       "./node_modules/@types/dotenv/index.d.ts": {
