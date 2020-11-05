@@ -25,7 +25,7 @@ class Graduation {
         this.context = context;
         this.baseUrl = baseUrl;
         this.cap = null;
-        this.capPos = new MRE.Vector3(0, .1, 0.00);
+        this.capPos = new MRE.Vector3(0, .07, -0.06);
         this.capScale = new MRE.Vector3(.3, .3, .3);
         this.scrollScale = new MRE.Vector3(.15, .15, .15);
         this.capRot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -215.0 * MRE.DegreesToRadians);
