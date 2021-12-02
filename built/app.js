@@ -25,7 +25,7 @@ class Graduation {
         this.context = context;
         this.baseUrl = baseUrl;
         this.cap = null;
-        this.capPos = new MRE.Vector3(0, .07, -0.06);
+        this.capPos = new MRE.Vector3(0, .1, 0.00);
         this.capScale = new MRE.Vector3(.3, .3, .3);
         this.scrollScale = new MRE.Vector3(.15, .15, .15);
         this.capRot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -215.0 * MRE.DegreesToRadians);
@@ -69,7 +69,7 @@ class Graduation {
         else {
             await this.startedImpl();
         }
-        this.scroll = Creation_1.Creation.createKit(this.context, "Graduation > Scroll", true, "1428444440862655433", this.capPos, this.scrollScale, this.capRot);
+        this.scroll = Creation_1.Creation.createKit(this.context, "Graduation > Scroll", true, "1851168092088959118", this.capPos, this.scrollScale, this.capRot);
     }
     userLeft(user) {
         // If the user was wearing a hat, destroy it. Otherwise it would be
@@ -132,7 +132,7 @@ class Graduation {
     wearHat(hatId, userId) {
         // If the user is wearing a hat, destroy it.
         this.removeHats(this.context.user(userId));
-        this.attachedHats.set(userId, Creation_1.Creation.createAttachedKit(this.context, "this sucks > Cap No Colid", true, "1474117174535651825", this.capPos, this.capScale, this.capRot, userId));
+        this.attachedHats.set(userId, Creation_1.Creation.createAttachedKit(this.context, "this sucks > Cap No Colid", true, "1851168158015029442", this.capPos, this.capScale, this.capRot, userId));
     }
     removeHats(user) {
         if (this.attachedHats.has(user.id)) {

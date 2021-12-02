@@ -62,7 +62,7 @@ export default class Graduation {
 		} else {
 			await this.startedImpl();
 		}
-		this.scroll = Creation.createKit(this.context, "Graduation > Scroll", true, "1428444440862655433", 
+		this.scroll = Creation.createKit(this.context, "Graduation > Scroll", true, "1851168092088959118", 
 		this.capPos, this.scrollScale, this.capRot);
 
 	}
@@ -142,7 +142,7 @@ export default class Graduation {
 		this.removeHats(this.context.user(userId));
 
 		this.attachedHats.set( userId, Creation.createAttachedKit(this.context, 
-			"this sucks > Cap No Colid", true, "1474117174535651825", 
+			"this sucks > Cap No Colid", true, "1851168158015029442", 
 		this.capPos, this.capScale, this.capRot, userId));
 	}
 	
