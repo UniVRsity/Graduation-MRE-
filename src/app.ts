@@ -6,6 +6,7 @@ array pop and find based on the question number we're on
  */
 // export all info to databse file then put databse items in array
 // and reference array points easy to push aand pop new qs
+//working now for late joiners
 
 import * as MRE from '@microsoft/mixed-reality-extension-sdk';
 import { Creation } from './Creation';
