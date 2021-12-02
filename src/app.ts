@@ -44,47 +44,29 @@ export default class Graduation {
 		// The delay value below is in milliseconds so 1000 is a one second delay.
 		// You may need to increase the delay or be able to decrease it depending
 		// on the speed of your PC.
-		const delay = 1000;
-		const argv = process.execArgv.join();
-		const isDebug = argv.includes('inspect') || argv.includes('debug');
-
-		// // version to use with non-async code
-		// if (isDebug) {
-		// 	setTimeout(this.startedImpl, delay);
-		// } else {
-		// 	this.startedImpl();
-		// }
-
-		// version to use with async code
-		if (isDebug) {
-			await new Promise(resolve => setTimeout(resolve, delay));
-			await this.startedImpl();
-		} else {
-			await this.startedImpl();
-		}
+	
 		this.scroll = Creation.createKit(this.context, "Graduation > Scroll", true, "1851168092088959118", 
 		this.capPos, this.scrollScale, this.capRot);
 
 	}
 
-	// use () => {} syntax here to get proper scope binding when called via setTimeout()
-	// if async is required, next line becomes private startedImpl = async () => {
-	private startedImpl = async () => {
-		// Show the hat menu.
-		this.showHatMenu();
-	}
+	
 	
 	private userLeft(user: MRE.User) {
 		// If the user was wearing a hat, destroy it. Otherwise it would be
 		// orphaned in the world.
 		this.removeHats(user);
 	}
+	private onUserJoined(user: MRE.User) {
+		this.showHatMenu(user);
+	}
 
-	private showHatMenu() {
+	private showHatMenu(userStuff: MRE.User) {
 		// Create a parent object for all the menu items.
 		const menu = MRE.Actor.Create(this.context, {});
+	
 		let y = 0.3;
-
+		let temp = "a" + userStuff.id;
 		// Create menu button
 		const buttonMesh = this.assets.createBoxMesh('button', 0.3, 0.3, 0.01);
 
@@ -92,7 +74,7 @@ export default class Graduation {
 		const button = MRE.Actor.Create(this.context, {
 			actor: {
 				parentId: menu.id,
-				name: "Grad Cap",
+				name: "Grad Cap" + temp,
 				appearance: { meshId: buttonMesh.id },
 				collider: { geometry: { shape: MRE.ColliderType.Auto } },
 				transform: {
@@ -101,8 +83,8 @@ export default class Graduation {
 			}
 		});
 		// Set a click handler on the button.
-			button.setBehavior(MRE.ButtonBehavior)
-				.onClick(user => this.wearHat("this sucks > Cap No Colid", user.id));
+		button.setBehavior(MRE.ButtonBehavior)
+			.onClick(userStuff => this.wearHat("this sucks > Cap No Colid", userStuff.id));
 
 			// Create a label for the menu entry.
 			MRE.Actor.Create(this.context, {

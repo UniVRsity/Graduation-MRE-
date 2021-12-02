@@ -18,8 +18,8 @@ export default class Graduation {
      * Once the context is "started", initialize the app.
      */
     private started;
-    private startedImpl;
     private userLeft;
+    private onUserJoined;
     private showHatMenu;
     private wearHat;
     private removeHats;
