@@ -31,6 +31,7 @@ export default class Graduation {
 		this.assets = new MRE.AssetContainer(context);
 		// Hook the context events we're interested in.
 		this.context.onStarted(() => this.started());
+		this.context.onUserJoined(user => this.onUserJoined(user));
 		this.context.onUserLeft(user => this.userLeft(user));
 	}
 
