@@ -47,7 +47,7 @@ export default class Graduation {
 		// You may need to increase the delay or be able to decrease it depending
 		// on the speed of your PC.
 	
-		this.scroll = Creation.createKit(this.context, "Graduation > Scroll", true, "1851168092088959118", 
+		this.scroll = Creation.createKit(this.context, "Graduation > Scroll", true, "1883939293651534467", 
 		this.capPos, this.scrollScale, this.capRot);
 
 	}
@@ -126,7 +126,7 @@ export default class Graduation {
 		this.removeHats(this.context.user(userId));
 
 		this.attachedHats.set( userId, Creation.createAttachedKit(this.context, 
-			"this sucks > Cap No Colid", true, "1851168158015029442", 
+			"this sucks > Cap No Colid", true, "1883939293777363588", 
 		this.capPos, this.capScale, this.capRot, userId));
 	}
 	

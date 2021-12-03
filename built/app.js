@@ -7,6 +7,7 @@ array pop and find based on the question number we're on
  */
 // export all info to databse file then put databse items in array
 // and reference array points easy to push aand pop new qs
+//working now for late joiners
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -47,7 +48,7 @@ class Graduation {
         // The delay value below is in milliseconds so 1000 is a one second delay.
         // You may need to increase the delay or be able to decrease it depending
         // on the speed of your PC.
-        this.scroll = Creation_1.Creation.createKit(this.context, "Graduation > Scroll", true, "1851168092088959118", this.capPos, this.scrollScale, this.capRot);
+        this.scroll = Creation_1.Creation.createKit(this.context, "Graduation > Scroll", true, "1883939293651534467", this.capPos, this.scrollScale, this.capRot);
     }
     userLeft(user) {
         // If the user was wearing a hat, destroy it. Otherwise it would be
@@ -114,7 +115,7 @@ class Graduation {
     wearHat(hatId, userId) {
         // If the user is wearing a hat, destroy it.
         this.removeHats(this.context.user(userId));
-        this.attachedHats.set(userId, Creation_1.Creation.createAttachedKit(this.context, "this sucks > Cap No Colid", true, "1851168158015029442", this.capPos, this.capScale, this.capRot, userId));
+        this.attachedHats.set(userId, Creation_1.Creation.createAttachedKit(this.context, "this sucks > Cap No Colid", true, "1883939293777363588", this.capPos, this.capScale, this.capRot, userId));
     }
     removeHats(user) {
         if (this.attachedHats.has(user.id)) {
