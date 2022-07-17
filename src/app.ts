@@ -47,7 +47,7 @@ export default class Graduation {
 		// You may need to increase the delay or be able to decrease it depending
 		// on the speed of your PC.
 	
-		this.scroll = Creation.createKit(this.context, "Graduation > Scroll", true, "1883939293651534467", 
+		this.scroll = Creation.createKit(this.context, "Graduation > Scroll", true, "2047641287510721202", 
 		this.capPos, this.scrollScale, this.capRot);
 
 	}
