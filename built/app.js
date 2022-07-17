@@ -48,7 +48,7 @@ class Graduation {
         // The delay value below is in milliseconds so 1000 is a one second delay.
         // You may need to increase the delay or be able to decrease it depending
         // on the speed of your PC.
-        this.scroll = Creation_1.Creation.createKit(this.context, "Graduation > Scroll", true, "2047641287510721202", this.capPos, this.scrollScale, this.capRot);
+        this.scroll = Creation_1.Creation.createKit(this.context, "Graduation > Scroll", true, "1883939293651534467", this.capPos, this.scrollScale, this.capRot);
     }
     userLeft(user) {
         // If the user was wearing a hat, destroy it. Otherwise it would be
