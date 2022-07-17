@@ -19,7 +19,7 @@ export default class Graduation {
 	private assets: MRE.AssetContainer;
 	private cap: MRE.Actor = null;
 	private capPos: MRE.Vector3 = new MRE.Vector3(0, .1, 0.00);
-	private capScale: MRE.Vector3 = new MRE.Vector3(.3, .3, .3);
+	private capScale: MRE.Vector3 = new MRE.Vector3(.0015, .0015, .0015);
 	private scrollScale: MRE.Vector3 = new MRE.Vector3(.15, .15, .15);
 	private capRot: MRE.Quaternion = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -215.0 * MRE.DegreesToRadians);
 
@@ -126,7 +126,7 @@ export default class Graduation {
 		this.removeHats(this.context.user(userId));
 
 		this.attachedHats.set( userId, Creation.createAttachedKit(this.context, 
-			"this sucks > Cap No Colid", true, "2047641287376503473", 
+			"this sucks > Cap No Colid", true, "2047641287510721202", 
 		this.capPos, this.capScale, this.capRot, userId));
 	}
 	
