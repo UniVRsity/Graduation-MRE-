@@ -115,7 +115,7 @@ class Graduation {
     wearHat(hatId, userId) {
         // If the user is wearing a hat, destroy it.
         this.removeHats(this.context.user(userId));
-        this.attachedHats.set(userId, Creation_1.Creation.createAttachedKit(this.context, "this sucks > Cap No Colid", true, "1883939293777363588", this.capPos, this.capScale, this.capRot, userId));
+        this.attachedHats.set(userId, Creation_1.Creation.createAttachedKit(this.context, "this sucks > Cap No Colid", true, "2047641287376503473", this.capPos, this.capScale, this.capRot, userId));
     }
     removeHats(user) {
         if (this.attachedHats.has(user.id)) {

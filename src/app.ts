@@ -126,7 +126,7 @@ export default class Graduation {
 		this.removeHats(this.context.user(userId));
 
 		this.attachedHats.set( userId, Creation.createAttachedKit(this.context, 
-			"this sucks > Cap No Colid", true, "1883939293777363588", 
+			"this sucks > Cap No Colid", true, "2047641287376503473", 
 		this.capPos, this.capScale, this.capRot, userId));
 	}
 	
