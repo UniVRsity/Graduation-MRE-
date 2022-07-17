@@ -27,7 +27,7 @@ class Graduation {
         this.baseUrl = baseUrl;
         this.cap = null;
         this.capPos = new MRE.Vector3(0, .1, 0.00);
-        this.capScale = new MRE.Vector3(.0015, .0015, .0015);
+        this.capScale = new MRE.Vector3(.3, .3, .3);
         this.scrollScale = new MRE.Vector3(.15, .15, .15);
         this.capRot = MRE.Quaternion.RotationAxis(MRE.Vector3.Up(), -215.0 * MRE.DegreesToRadians);
         this.scroll = null;
@@ -115,7 +115,7 @@ class Graduation {
     wearHat(hatId, userId) {
         // If the user is wearing a hat, destroy it.
         this.removeHats(this.context.user(userId));
-        this.attachedHats.set(userId, Creation_1.Creation.createAttachedKit(this.context, "this sucks > Cap No Colid", true, "2047641287510721202", this.capPos, this.capScale, this.capRot, userId));
+        this.attachedHats.set(userId, Creation_1.Creation.createAttachedKit(this.context, "this sucks > Cap No Colid", true, "2047641287376503473", this.capPos, this.capScale, this.capRot, userId));
     }
     removeHats(user) {
         if (this.attachedHats.has(user.id)) {
